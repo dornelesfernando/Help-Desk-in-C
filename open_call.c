@@ -1,13 +1,15 @@
-#include <stdio.h>
+                    #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "structs.h"
 #include "menu.h"
 #include "services.h"
+#include "logs.h"
 
 // Códigos ANSI para cores
 #define RESET       "\033[0m"
+#define BOLD        "\033[1m"
 #define GREEN       "\033[32m"
 #define RED         "\033[31m"
 #define CYAN        "\033[36m"
@@ -15,13 +17,15 @@
 #define BLUE        "\033[34m"
 #define MAGENTA     "\033[35m"
 
-Call* open_call(int *id_control) {
+Call* open_call(int *id_control, char **logs) {
+    adicionar_log_dinamico(logs, "Abrindo chamado...");
 
     char email[100];
     int email_control = 0;
     int scanf_control = 0;
     int level = 0;
     int level_control = 0;
+    adicionar_log_dinamico(logs, "Parâmetros de criação de chamado inicializados");
     
     Call* new_call_data;
     
@@ -31,13 +35,14 @@ Call* open_call(int *id_control) {
         printf(RED "ERRO CRITICO: Falha ao alocar memoria para o chamado!\n" RESET);
         return NULL;
     }
+    adicionar_log_dinamico(logs, "Struct chamado inicializado");
     
     (*id_control)++;
     new_call_data->id = *id_control;
     new_call_data->status = ABERTO;
     new_call_data->created_at = time(NULL);
     
-    header(0);
+    header();
     printf(GREEN "- Chamado ID:" CYAN " %d " GREEN "sendo criado.\n" RESET, new_call_data->id);
     line();
     printf("Por favor, preencha os seguintes dados:\n");
@@ -50,15 +55,18 @@ Call* open_call(int *id_control) {
     printf(CYAN   "     0) " BLUE "Baixa" RESET);
     printf(CYAN   "     1) " YELLOW "Média" RESET);
     printf(CYAN   "     2) " RED "Alta" RESET);
-    printf(CYAN   "     3) " MAGENTA "Urgente\n" RESET);
+    printf(CYAN   "     3) " BOLD RED "Urgente\n" RESET);
+    printf(RED    " \n DIGITE \"" BLUE "!q" RED "\" PARA CANCELAR\n" RESET);
     line();
    
     printf(CYAN  " [1] " RED "--> " RESET);
     scanf(" %99[^\n]", new_call_data->name);
+    if (test_cancel(new_call_data->name)) { free(new_call_data); (*id_control)--; return NULL; }
 
     do {
         printf(CYAN  " [2] " RED "--> " RESET);
         scanf(" %99[^\n]", email);
+        if (test_cancel(email)) { free(new_call_data); (*id_control)--; return NULL; }
     
         char* arroba = strchr(email, '@');
         char* dot = strchr(email, '.');
@@ -71,13 +79,15 @@ Call* open_call(int *id_control) {
             printf(RED  " --> Email inválido\n" RESET);
         }
     } while(!email_control);
+    adicionar_log_dinamico(logs, "Email validado");
 
     printf(CYAN  " [3] " RED "--> " RESET);
     scanf(" %149[^\n]", new_call_data->title);
+    if (test_cancel(new_call_data->title)) { free(new_call_data); (*id_control)--; return NULL; }
     
     printf(CYAN  " [4] " RED "--> " RESET);
     scanf(" %1023[^\n]", new_call_data->desc);
-    
+    if (test_cancel(new_call_data->desc)) { free(new_call_data); (*id_control)--; return NULL; }
     
     do {
         printf(CYAN  " [5] " RED "--> " RESET);
@@ -107,10 +117,9 @@ Call* open_call(int *id_control) {
             printf(RED  " --> Level inválido\n" RESET);
         }
         
-        clean_buffer_stdin();
+                clean_buffer_stdin();
     } while (!(scanf_control && level_control));
-    
-    pre_log();
-    printf(GREEN "Chamado ID:" CYAN " %d " GREEN "criado com sucesso!\n" RESET, new_call_data->id);
+    adicionar_log_dinamico(logs, "Level validado!");
+
     return new_call_data; 
 }

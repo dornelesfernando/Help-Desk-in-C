@@ -4,6 +4,18 @@
 #include <time.h>
 
 typedef struct {
+    int id_control;
+    int login_control;
+    int logs_control;
+    int last_call_oppened;
+    int scanf_control;
+    int selected_id;
+    int returned_id;
+    int priority_control;
+    int status_control;
+} Params;
+
+typedef struct {
 	int *dados;
 	int capacidade;
 	int tamanho;
@@ -13,7 +25,6 @@ typedef struct {
 typedef enum {
     ABERTO,
     EM_ANDAMENTO,
-    AGUARDANDO_CLIENTE,
     RESOLVIDO,
     FECHADO
 } StatusEnum;

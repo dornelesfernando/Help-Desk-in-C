@@ -11,13 +11,13 @@
 #define RED         "\033[31m"
 
 
-FilaPrioridadeMaxima* criar_fila_prioridade_maxima(int capacidade, int logs_control, char **logs) {
+FilaPrioridadeMaxima* criar_fila_prioridade_maxima(int capacidade, char **logs) {
     FilaPrioridadeMaxima *fila = (FilaPrioridadeMaxima*)malloc(sizeof(FilaPrioridadeMaxima));
     fila->dados = (int*)malloc(capacidade * sizeof(int));
     fila->capacidade = capacidade;
     fila->tamanho = 0;
     
-    if(logs_control) adicionar_log_dinamico(logs, "Fila Criada!");
+    adicionar_log_dinamico(logs, "Fila Criada!");
 
     return fila;
 }
@@ -48,10 +48,8 @@ int login(int logado) {
         scanf("%63s", pass_in);  // lê string (até 63 chars + '\0')
     
         if (strcmp(user_in, USER) == 0 && strcmp(pass_in, PASS) == 0) {
-            printf(GREEN "Login realizado com sucesso!\n" RESET);
             return 1;
         } else {
-            printf(RED "Falha ao fazer login.\n" RESET);
             return 0;
         }
     }
@@ -66,4 +64,29 @@ void liberar_call_list(Call *call_list[], int call_list_control) {
 void clean_buffer_stdin() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
+}
+
+int test_cancel(char* input) {
+    if (strcmp(input, "!q") == 0) return 1;
+    return 0;
+}
+
+const char* get_status_char(StatusEnum s) {
+    switch (s) {
+        case ABERTO:           return "Aberto";
+        case EM_ANDAMENTO:     return "Em Andamento";
+        case RESOLVIDO:        return "Resolvido";
+        case FECHADO:          return "Fechado";
+        default:               return "Desconhecido";
+    }
+}
+
+const char* get_priority_char(PriorityEnum p) {
+    switch (p) {
+        case BAIXA:   return "Baixa";
+        case MEDIA:   return "Média";
+        case ALTA:    return "Alta";
+        case URGENTE: return "Urgente";
+        default:      return "Desconhecida";
+    }
 }
