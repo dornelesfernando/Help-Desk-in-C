@@ -13,8 +13,8 @@ void adicionar_log_dinamico(char **logs, char *novo_log) {
     size_t tamanho_atual = (*logs == NULL) ? 0 : strlen(*logs);
     size_t tamanho_novo_log = strlen(novo_log);
     
-    //                                                           "|0" ";"
-    size_t novo_tamanho_total = tamanho_atual + tamanho_novo_log + 1 + 1;
+    //                                                           "|0" "\n" "--> "
+    size_t novo_tamanho_total = tamanho_atual + tamanho_novo_log + 1 + 1 + 4;
     
     char *temp = (char*)realloc(*logs, novo_tamanho_total);
     
@@ -33,8 +33,9 @@ void adicionar_log_dinamico(char **logs, char *novo_log) {
     }
     
     // Adiciona log no fim
+    strcat(*logs, "--> ");
     strcat(*logs, novo_log);
-    strcat(*logs, ";");
+    strcat(*logs, "\n");
 }
 
 void liberar_logs(char *logs) {

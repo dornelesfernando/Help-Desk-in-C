@@ -37,8 +37,7 @@ void ascii_logo() {
 
 
 
-void header(int clear_control) {
-    if(clear_control) clear();
+void header() {
     line();
     ascii_logo();
     printf(GREEN BOLD "                     SISTEMA HELP DESK\n" RESET);
@@ -66,10 +65,12 @@ void menu_inicial() {
     printf(BOLD "\n                       MENU PRINCIPAL\n" RESET);
     printf(BLUE "-------------------------------------------------------------\n" RESET);
     printf(GREEN  " [1] " RESET "Abrir chamado\n");
-    printf(GREEN  " [2] " RESET "Verificar chamados\n");
-    printf(GREEN  " [3] " RESET "Ver lista normal\n");
-    printf(GREEN  " [4] " RESET "Ver lista de prioridade\n");
-    printf(GREEN  " [5] " RESET "Ver ultimo chamado aberto\n");
+    printf(GREEN  " [2] " RESET "Atualizar chamado\n");
+    printf(GREEN  " [3] " RESET "Ver todos os chamados\n");
+    printf(GREEN  " [4] " RESET "Ver lista de baixa prioridade (normal)\n");
+    printf(GREEN  " [5] " RESET "Ver lista por prioridade e status\n");
+    printf(GREEN  " [6] " RESET "Ver ultimo chamado aberto\n");
+    printf(YELLOW " [7] " RESET "Visualizar log's\n");
     printf(CYAN   " [8] " RESET "Acessar menu do administrador\n");
     printf(RED    " [9] " RESET "Sair do sistema\n");
     printf(BLUE "-------------------------------------------------------------\n" RESET);
@@ -81,7 +82,8 @@ void menu_administrador() {
     printf(BLUE "-------------------------------------------------------------\n" RESET);
     printf(GREEN  " [1] " RESET "Atender chamado\n");
     printf(GREEN  " [2] " RESET "Cancelar chamado\n");
-    printf(GREEN  " [3] " RESET "Priorizar chamado\n");
+    printf(GREEN  " [3] " RESET "Atualizar chamado\n");
+    printf(YELLOW " [7] " RESET "Visualizar log's\n");
     printf(CYAN   " [8] " RESET "Acessar menu do principal\n");
     printf(RED    " [9] " RESET "Sair do menu do administrador\n");
     printf(BLUE "-------------------------------------------------------------\n" RESET);
@@ -89,7 +91,26 @@ void menu_administrador() {
 }
 
 void pre_log() {
-    clear();
     line();
     printf(CYAN "LOG: " RESET);
+}
+
+const char* get_status_styled(StatusEnum s) {
+    switch (s) {
+        case ABERTO:           return YELLOW "Aberto" RESET;
+        case EM_ANDAMENTO:     return BLUE   "Em Andamento" RESET;
+        case RESOLVIDO:        return GREEN  "Resolvido" RESET;
+        case FECHADO:          return BOLD   "Fechado"   RESET;
+        default:               return "Desconhecido";
+    }
+}
+
+const char* get_priority_styled(PriorityEnum p) {
+    switch (p) {
+        case BAIXA:   return GREEN   "Baixa"   RESET;
+        case MEDIA:   return YELLOW  "Média"   RESET;
+        case ALTA:    return RED     "Alta"    RESET;
+        case URGENTE: return BOLD RED "Urgente" RESET;
+        default:      return "Desconhecida";
+    }
 }
