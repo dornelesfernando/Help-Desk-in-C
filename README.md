@@ -1,5 +1,7 @@
 <a id="readme-top"></a>
 
+<img width="1896" height="834" alt="Captura de tela 2025-10-22 233104" src="https://github.com/user-attachments/assets/a0b1dd85-0424-4625-9d16-d667d65b0a22" />
+
 <div align="center">
     
   ![https://img.shields.io/badge/status-em--desenvolvimento-blueviolet?style=for-the-badge](https://img.shields.io/badge/status-em--desenvolvimento-blueviolet?style=for-the-badge)
