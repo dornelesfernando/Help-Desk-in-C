@@ -1,33 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "services.h"
-#include "logs.h"
-
-// Códigos ANSI para cores
-#define RESET       "\033[0m"
-#define GREEN       "\033[32m"
-#define RED         "\033[31m"
-
-
-FilaPrioridadeMaxima* criar_fila_prioridade_maxima(int capacidade, char **logs) {
-    FilaPrioridadeMaxima *fila = (FilaPrioridadeMaxima*)malloc(sizeof(FilaPrioridadeMaxima));
-    fila->dados = (int*)malloc(capacidade * sizeof(int));
-    fila->capacidade = capacidade;
-    fila->tamanho = 0;
-    
-    adicionar_log_dinamico(logs, "Fila Criada!");
-
-    return fila;
-}
-
-void liberar_fila(FilaPrioridadeMaxima *fila) {
-    free(fila->dados);
-    free(fila);
-    
-    printf("Fila Liberada!\n");
-}
 
 int login(int logado) {
     
