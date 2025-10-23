@@ -19,12 +19,6 @@ typedef struct {
     char log_message[128];
 } MainParams;
 
-typedef struct {
-	int *dados;
-	int capacidade;
-	int tamanho;
-} FilaPrioridadeMaxima;
-
 // Defile the status
 typedef enum {
     ABERTO,
@@ -69,5 +63,19 @@ typedef struct {
     char solution[1024];
 
 } Call;
+
+typedef struct {
+    Call *data;
+    int capacity;
+    int size;
+} CallHeap;
+
+typedef struct {
+    Call *data;  
+    int capacity;
+    int size;
+    int front;  
+    int tail;       
+} CallFIFO;
 
 #endif // STRUCTS_H

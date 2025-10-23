@@ -7,6 +7,15 @@
 
 #include "structs.h"
 
+void replace(Call *a, Call *b);
+
+CallHeap* create_call_list_heap(int capacity);
+void heap_insert (CallHeap *call, Call data);
+void tidying_up(CallHeap *call, int index);
+
+CallFIFO* create_call_list_fifo(int capacity);
+void fifo_enqueue(CallFIFO *call, Call data);
+
 int login(int logado);
 void liberar_call_list(Call *call_list[], int call_list_control);
 void clean_buffer_stdin();

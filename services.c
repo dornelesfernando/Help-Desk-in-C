@@ -1,5 +1,70 @@
 #include "services.h"
 
+// ====================================================================== HEAP
+void replace(Call *a, Call *b) {
+    Call temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+CallHeap* create_call_list_heap(int capacity) {
+    
+    CallHeap* call_list = (CallHeap*)malloc(sizeof(CallHeap*));
+    call_list->data = (Call*)malloc(capacity * sizeof(Call));
+    call_list->capacity = capacity;
+    call_list->size = 0;
+    
+    return call_list;
+}
+
+void heap_insert (CallHeap *call, Call data) {
+    if (call->size == call->capacity) {
+        printf("Overflow do heap\n");
+        return;
+    }
+    
+    call->size++;
+    int index = call->size - 1;
+    call->data[index] = data;
+    tidying_up(call, index);
+}
+
+void tidying_up(CallHeap *call, int index) {
+    if (index == 0) return;
+
+    int father_index = (index - 1) / 2;
+
+    while (index > 0 && call->data[index].priority > call->data[father_index].priority) {
+        replace(&call->data[index], &call->data[father_index]);
+        index = father_index;
+        father_index = (index - 1) / 2;
+    }
+}
+
+// ====================================================================== FIFO
+CallFIFO* create_call_list_fifo(int capacity) {
+    
+    CallFIFO* call_list = (CallFIFO*)malloc(sizeof(CallFIFO*));
+    call_list->data = (Call*)malloc(capacity * sizeof(Call));
+    call_list->capacity = capacity;
+    call_list->size = 0;
+    call_list->front = 0;
+    call_list->tail = -1;
+
+    return call_list;
+}
+
+void fifo_enqueue(CallFIFO *call, Call data) {
+    if (call->size == call->capacity) {
+        printf("Overflow da fifo\n");
+        return;
+    }
+    
+    call->size++;
+    call->data[call->tail] = data;
+    call->tail = (call->tail + 1) % call->capacity;
+}
+
 int login(int logado) {
     
     if(logado) {
