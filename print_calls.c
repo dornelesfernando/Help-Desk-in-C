@@ -1,22 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <time.h> 
-
-#include "menu.h"
-#include "logs.h"
-#include "structs.h"
-
-// Códigos ANSI para cores
-#define RESET       "\033[0m"
-#define BOLD        "\033[1m"
-#define GREEN       "\033[32m"
-#define RED         "\033[31m"
-#define YELLOW      "\033[33m"
-#define CYAN        "\033[36m"
-#define BLUE        "\033[34m"
-#define MAGENTA     "\033[35m"
+#include "print_calls.h"
 
 void print_calls(Call *call_data, char **logs) {
     char log_message[128];

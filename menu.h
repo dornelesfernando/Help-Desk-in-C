@@ -1,7 +1,12 @@
 #ifndef MENU_H
 #define MENU_H
 
+#include <stdlib.h>
+#include <stdio.h>
+
 #include "structs.h"
+
+#include "config_ANSI.h"
 
 void clear();
 void line();

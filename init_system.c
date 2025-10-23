@@ -1,23 +1,31 @@
 #include "init_system.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "services.h"
-
-void init_system(Params *params) {
-
-    params->id_control = 0;
+void init_system(MainParams *params, char **logs) {
     
-    // int  = 0;
-    // int login_control = 0;
-    // int logs_control = 0;
-    // int last_call_oppened = 0;
-    // int scanf_control = 0;
-    // int selected_id = 0;
-    // int returned_id = 0;
-    // int priority_control = 9;
-    // int status_control = 9;
+    // logs
+    params->log_message[128];
 
+    // call list
+    params-> call_list_size = 100;
+    params->call_list_index = 0;
+    params->call_id = 0;
+
+    // id's
+    params->last_opened_call_id = 0;
+    params->selected_call_id = 0;
+    params->returned_call_id = 0;
+
+    // controlers
+    params->is_logged_in = 0;
+    params->input_status = 0;
+    params->request_log = 0;
+    
+    // filters
+    params->priority_filter = 9;
+    params->status_filter = 9;
+    
+    
+
+    adicionar_log_dinamico(logs, "Parâmetros carregados.");
 }
 

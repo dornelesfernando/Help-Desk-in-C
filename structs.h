@@ -4,16 +4,20 @@
 #include <time.h>
 
 typedef struct {
-    int id_control;
-    int login_control;
-    int logs_control;
-    int last_call_oppened;
-    int scanf_control;
-    int selected_id;
-    int returned_id;
-    int priority_control;
-    int status_control;
-} Params;
+    int call_id;
+    int is_logged_in;
+    int last_opened_call_id;
+    int input_status;
+    int selected_call_id;
+    int returned_call_id;
+    int priority_filter;
+    int status_filter;
+    int call_list_size;
+    int call_list_index;
+    int request_log;
+
+    char log_message[128];
+} MainParams;
 
 typedef struct {
 	int *dados;

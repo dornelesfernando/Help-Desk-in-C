@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "logs.h"
-
-// Códigos ANSI para cores
-#define RESET       "\033[0m"
-#define GREEN       "\033[32m"
-#define RED         "\033[31m"
 
 void adicionar_log_dinamico(char **logs, char *novo_log) {
     size_t tamanho_atual = (*logs == NULL) ? 0 : strlen(*logs);
