@@ -23,8 +23,6 @@ void init_system(MainParams *params, char **logs) {
     // filters
     params->priority_filter = 9;
     params->status_filter = 9;
-    
-    
 
     adicionar_log_dinamico(logs, "Parâmetros carregados.");
 }
