@@ -18,13 +18,13 @@
 </h1>
 
 <p align="center">
-  Um sistema de Help Desk baseado em terminal, implementado em C puro para a disciplina de Estrutura de Dados.
+  Um sistema de Help Desk baseado em terminal, implementado em C puro para a disciplina de Estrutura de Dados e Programação.
   <br />
   <a href="https://github.com/dornelesfernando/HelpDesk_C_EstruturaDeDados"><strong>Explore os Arquivos »</strong></a>
   <br />
   <br />
   <a href="#começando-ambiente-e-instalacao">Baixe, Configure e Execute</a>
-  ·
+  <!--· -->
   <!-- <a href="https://github.com/dornelesfernando/HelpDesk_C_EstruturaDeDados/issues/new?template=bug-report-%F0%9F%90%9B.md">Reportar Bug</a> -->
   <!-- · -->
   <!-- <a href="https://github.com/dornelesfernando/HelpDesk_C_EstruturaDeDados/issues/new?template=feature-request-%E2%9C%A8.md">Sugerir Melhoria</a> -->
@@ -33,14 +33,14 @@
 <a id="visao-geral-do-projeto"></a>
 ## 🔎 Visão Geral do Projeto
 
-O **System Help Desk em C** é um projeto acadêmico desenvolvido para a disciplina de Estrutura de Dados e Programação. O objetivo é aplicar conceitos fundamentais de programação em C e estruturas de dados complexas para simular um sistema de gerenciamento de chamados de TI.
+O **System Help Desk em C** é um projeto acadêmico desenvolvido para a disciplina de Estrutura de Dados e Programação. O objetivo é aplicar conceitos fundamentais de programação em C e estruturas de dados complexas para simular um sistema de gerenciamento de chamados de T.I..
 
 O sistema **não utiliza banco de dados**; toda a gestão de dados é feita em memória durante a execução, com os dados sendo gerenciados por estruturas alocadas dinamicamente.
 
 O núcleo do projeto é a implementação de um sistema de atendimento que utiliza duas filas distintas para garantir a eficiência e a ordem correta do atendimento, simulando um ambiente de suporte técnico real:
 
-- **Fila de Prioridade (Max-Heap):** Utilizada para gerenciar chamados de prioridade `URGENTE` e `ALTA`. Isso garante que, independentemente da ordem de chegada, os chamados mais críticos sejam sempre "puxados" para o topo e atendidos primeiro.
-- **Fila Comum (FIFO - First-In, First-Out):** Utilizada para gerenciar chamados de prioridade `MEDIA` e `BAIXA`. Isso assegura um atendimento justo, baseado na ordem de chegada, para problemas não-críticos.
+- **Fila de Prioridade (Max-Heap):** Utilizada para gerenciar chamados de prioridade `URGENTE`, `ALTA` e `MEDIA`. Isso garante que, independentemente da ordem de chegada, os chamados mais críticos sejam sempre "puxados" para o topo e atendidos primeiro.
+- **Fila Comum (FIFO - First-In, First-Out):** Utilizada para gerenciar chamados de prioridade `BAIXA`. Isso assegura um atendimento justo, baseado na ordem de chegada, para problemas não-críticos.
 
 O fluxo de atendimento do administrador sempre verifica a Fila de Prioridade (Heap) primeiro. Somente quando ela está vazia, o sistema começa a processar a Fila Comum (FIFO).
 
@@ -74,8 +74,8 @@ A plataforma é dividida em módulos que cobrem as principais áreas de gestão 
 - **Abertura de Chamados:** Permite que usuários (clientes) abram novos chamados, preenchendo informações como nome, e-mail, título, descrição e nível de prioridade.
 - **Login de Administrador:** Uma área restrita (atualmente com senha "hard-coded") permite o acesso ao menu de gerenciamento.
 - **Atendimento de Chamados (Lógica de Negócio):** Administradores atendem chamados seguindo a regra de negócio estrita:
-    1. Atender todos os chamados da **Heap de Prioridade** (Urgente/Alto).
-    2. Apenas se a Heap estiver vazia, atender chamados da **Fila FIFO** (Médio/Baixo).
+    1. Atender todos os chamados da **Heap de Prioridade** (Urgente/Alto/Médio).
+    2. Apenas se a Heap estiver vazia, atender chamados da **Fila FIFO** (Baixo).
 - **Listagem e Filtros:** Clientes e administradores podem listar todos os chamados cadastrados, com opções para filtrar por prioridade ou status.
 - **Atualização de Chamados:** Clientes podem atualizar seus próprios chamados (se não estiverem fechados), e administradores podem atualizar qualquer chamado.
 - **Sistema de Logs:** Um sistema de log dinâmico, implementado com `realloc`, registra todas as ações importantes do sistema, que podem ser visualizadas ao final da execução.
@@ -113,7 +113,7 @@ A escolha da stack tecnológica foi orientada pela exigência da disciplina, foc
 
 <a id="começando-ambiente-e-instalacao"></a>
 ## ⚙️ Começando: Ambiente e Instalação
-Esta seção fornece um guia detalhado para compilar e executar o projeto localmente.
+Esta seção fornece um guia para compilar e executar o projeto localmente.
 
 <a id="pre-requisitos-do-sistema"></a>
 ### Pré-requisitos do Sistema
@@ -130,7 +130,7 @@ Siga os passos abaixo para colocar o sistema em funcionamento.
     {[git clone https://github.com/dornelesfernando/Help-Desk-in-C.git]}
 
 #### Passo 2: Compilando o Sistema
-1.  Abra o projeto em um compilador online como *Online GBD*
+1.  Abra o projeto em um compilador online como *Online GBD* ou outro compilador.
 
 #### Passo 3: Executando o Sistema
 1.  Após a compilação bem-sucedida, execute o programa
@@ -143,12 +143,12 @@ Após a execução, o sistema apresentará o menu principal no terminal. Siga as
 
 **Menu do Cliente (Não-Logado):**
 1.  **Abrir chamado:** Inicia o fluxo de criação de um novo ticket.
-2.  **Atualizar chamado:** Permite ao cliente atualizar um chamado existente (geralmente buscando pelo ID).
+2.  **Atualizar chamado:** Permite ao cliente atualizar um chamado existente.
 3.  **Ver todos os chamados:** Lista todos os chamados no sistema.
 4.  **Ver lista de baixa prioridade (normal):** Mostra apenas chamados da fila FIFO.
 5.  **Ver lista por prioridade e status:** Permite filtrar a visualização.
 6.  **Ver último chamado aberto:** Exibe os detalhes do último chamado criado nesta sessão.
-7.  **Visualizar log's:** Mostra os logs do sistema (se o administrador permitir).
+7.  **Visualizar log's:** Mostra os logs do sistema.
 8.  **Acessar menu do administrador:** Pede uma senha para logar.
 9.  **Sair do sistema:** Encerra o programa.
 
