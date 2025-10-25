@@ -3,9 +3,6 @@
 
 #include <stdio.h>
 
-#include <stdlib.h> // --- REMOVER NO PROJETO FINAL
-#include <string.h> // --- REMOVER NO PROJETO FINAL
-
 #include "services.h"
 #include "structs.h"
 #include "menu.h"

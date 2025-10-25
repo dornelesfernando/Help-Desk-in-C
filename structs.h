@@ -61,7 +61,6 @@ typedef struct {
 
     // --- Resolução ---
     char solution[1024];
-
 } Call;
 
 typedef struct {
@@ -77,5 +76,17 @@ typedef struct {
     int front;  
     int tail;       
 } CallFIFO;
+
+typedef struct CallNode {
+    Call *data;
+    struct CallNode *next;
+    struct CallNode *prev;
+} CallNode;
+
+typedef struct {
+    CallNode *head;
+    CallNode *tail;
+    int size;
+} CallService;
 
 #endif // STRUCTS_H

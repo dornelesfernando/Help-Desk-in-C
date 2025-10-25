@@ -10,6 +10,9 @@ void replace(Call *a, Call *b) {
 CallHeap* create_call_list_heap(int capacity) {
     
     CallHeap* call_list = (CallHeap*)malloc(sizeof(CallHeap*));
+    
+    if (call_list == NULL) return NULL;
+    
     call_list->data = (Call*)malloc(capacity * sizeof(Call));
     call_list->capacity = capacity;
     call_list->size = 0;
@@ -34,7 +37,7 @@ void tidying_up(CallHeap *call, int index) {
 
     int father_index = (index - 1) / 2;
 
-    while (index > 0 && call->data[index].priority > call->data[father_index].priority) {
+    while (index > 0 && get_priority_int(call->data[index].priority) > get_priority_int(call->data[father_index].priority)) {
         replace(&call->data[index], &call->data[father_index]);
         index = father_index;
         father_index = (index - 1) / 2;
@@ -45,6 +48,9 @@ void tidying_up(CallHeap *call, int index) {
 CallFIFO* create_call_list_fifo(int capacity) {
     
     CallFIFO* call_list = (CallFIFO*)malloc(sizeof(CallFIFO*));
+    
+    if (call_list == NULL) return NULL;
+    
     call_list->data = (Call*)malloc(capacity * sizeof(Call));
     call_list->capacity = capacity;
     call_list->size = 0;
@@ -63,6 +69,23 @@ void fifo_enqueue(CallFIFO *call, Call data) {
     call->size++;
     call->data[call->tail] = data;
     call->tail = (call->tail + 1) % call->capacity;
+}
+
+// =================================================================== Service
+CallService *create_call_list_service() {
+    CallService *call_list = (CallService*) malloc(sizeof(CallService));
+    
+    if (call_list == NULL) return NULL;
+    
+    call_list->head = NULL;
+    call_list->tail = NULL;
+    call_list->size = 0;
+    
+    return call_list;
+}
+
+void concat_call_list(CallHeap *call_list_heap[], CallFIFO *call_list_fifo[]) {
+    
 }
 
 int login(int logado) {
@@ -91,11 +114,11 @@ int login(int logado) {
     }
 }
 
-void liberar_call_list(Call *call_list[], int call_list_control) {
-    for (int i = 0; i < call_list_control; i++) {
-        free(call_list[i]);
-    }
-}
+// void liberar_call_list(Call *call_list[], int call_list_control) {
+//     for (int i = 0; i < call_list_control; i++) {
+//         free(call_list[i]);
+//     }
+// }
 
 void clean_buffer_stdin() {
     int c;
@@ -124,5 +147,15 @@ const char* get_priority_char(PriorityEnum p) {
         case ALTA:    return "Alta";
         case URGENTE: return "Urgente";
         default:      return "Desconhecida";
+    }
+}
+
+const int get_priority_int(PriorityEnum p) {
+    switch (p) {
+        case BAIXA:   return 0;
+        case MEDIA:   return 1;
+        case ALTA:    return 2;
+        case URGENTE: return 3;
+        default:      return -1;
     }
 }
