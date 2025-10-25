@@ -16,11 +16,15 @@ void tidying_up(CallHeap *call, int index);
 CallFIFO* create_call_list_fifo(int capacity);
 void fifo_enqueue(CallFIFO *call, Call data);
 
+CallService* create_call_list_service();
+
 int login(int logado);
 void liberar_call_list(Call *call_list[], int call_list_control);
 void clean_buffer_stdin();
 int test_cancel(char* input);
+
 const char* get_status_char(StatusEnum s);
 const char* get_priority_char(PriorityEnum p);
+const int get_priority_int(PriorityEnum p);
 
 #endif // SERVICES_H

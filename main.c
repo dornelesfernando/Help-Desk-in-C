@@ -12,6 +12,9 @@ int main() {
     // Inicializa fila Heap e Fifo
     CallHeap *call_list_heap = create_call_list_heap(10);
     CallFIFO *call_list_fifo = create_call_list_fifo(10);
+    
+    // Inicializa fila conjunta (fila de serviço)
+    CallService* call_service = create_call_list_service();
 
     // ======================= MAIN =======================
     adicionar_log_dinamico(&logs, "Sistema inicializado com sucesso.");
@@ -119,12 +122,10 @@ int main() {
                         printf(RED "Operação cancelada pelo usuário\n" RESET);
                         adicionar_log_dinamico(&logs, "Operação cancelada pelo usuário.");
                     }
-                    
-                    printf("\n\nPressione ENTER para voltar ao menu...");
-                    getchar();
-                    
+ 
                     break;
                 case 2: 
+                    
                     // params.selected_call_id = list_calls(call_list, params.call_list_index, 9, 9, 1, &logs);
                     // clear();
                     
