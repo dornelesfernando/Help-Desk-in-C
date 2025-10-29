@@ -73,7 +73,7 @@ void menu_administrador() {
     printf(GREEN  " [3] " RESET "Atualizar chamado\n");
     printf(YELLOW " [7] " RESET "Visualizar log's\n");
     printf(CYAN   " [8] " RESET "Acessar menu do principal\n");
-    printf(RED    " [9] " RESET "Sair do menu do administrador\n");
+    printf(RED    " [9] " RESET "Sair do sistema\n");
     printf(BLUE "-------------------------------------------------------------\n" RESET);
     printf(YELLOW "Selecione uma opção: " RESET);
 }

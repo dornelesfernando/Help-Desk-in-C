@@ -92,6 +92,21 @@ CallService *concat_call_list(CallHeap *call_list_heap, CallFIFO *call_list_fifo
         return NULL;
     }
     
+    if(call_list_heap != NULL && call_list_heap->size > 0) {
+        for (int i = 0; i < call_list_heap->size; i++) {
+            Call *originalCall = &call_list_heap->data[i];
+            
+            Call *newCall = (Call*) malloc(sizeof(Call));
+            if (newCall == NULL) {
+                perror("Falha ao alocar copia (Heap)");
+                continue;
+            }
+            memcpy(newCall, originalCall, sizeof(Call));
+            
+            insert_at_end_service(call_list_service, newCall);
+        }
+    }
+    
     if(call_list_fifo != NULL && call_list_fifo->size > 0) {
         // Adiciona os valores da FIFO    
         for (int i = 0; i < call_list_fifo->size; i++) {
@@ -106,21 +121,6 @@ CallService *concat_call_list(CallHeap *call_list_heap, CallFIFO *call_list_fifo
             }
             memcpy(newCall, originalCall, sizeof(Call));
 
-            insert_at_end_service(call_list_service, newCall);
-        }
-    }
-    
-    if(call_list_heap != NULL && call_list_heap->size > 0) {
-        for (int i = 0; i < call_list_heap->size; i++) {
-            Call *originalCall = &call_list_heap->data[i];
-            
-            Call *newCall = (Call*) malloc(sizeof(Call));
-            if (newCall == NULL) {
-                perror("Falha ao alocar copia (Heap)");
-                continue;
-            }
-            memcpy(newCall, originalCall, sizeof(Call));
-            
             insert_at_end_service(call_list_service, newCall);
         }
     }
