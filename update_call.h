@@ -9,6 +9,5 @@
 #include "services.h"
 #include "structs.h"
 
-void update_call(Call *call_data, int login_control, char **logs);
-
+void update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call_list_fifo, int selected_id, int login_control, char **logs);
 #endif // UPDATE_CALL_H

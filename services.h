@@ -27,4 +27,8 @@ const char* get_status_char(StatusEnum s);
 const char* get_priority_char(PriorityEnum p);
 const int get_priority_int(PriorityEnum p);
 
+CallService *concat_call_list(CallHeap *call_list_heap, CallFIFO *call_list_fifo);
+void insert_at_end_service(CallService *call_list_service, Call *call);
+void free_list_service(CallService *call_list);
+
 #endif // SERVICES_H

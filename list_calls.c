@@ -1,6 +1,6 @@
 #include "list_calls.h"
 
-int list_calls(Call *call_list[], int call_list_control, int priority, int status, int select_control, char **logs) {
+int list_calls_service(CallService *call_list, int priority, int status, int select_control, char **logs) {
     
     // Init params
     int scanf_control = 0;
@@ -11,7 +11,7 @@ int list_calls(Call *call_list[], int call_list_control, int priority, int statu
     
     char log_message[128];
 
-    if(!call_list_control) {
+    if(call_list == NULL && call_list->size == 0) {
         return 9999;
     } else {
         if(priority == 9 && status == 9) {
@@ -68,8 +68,10 @@ int list_calls(Call *call_list[], int call_list_control, int priority, int statu
             break;
     }
     
-    for(int i = 0; i < call_list_control; i++) {
-        Call *call_data = call_list[i];
+    CallNode *current_node = call_list->head;
+    
+    while (current_node != NULL) {
+        Call *call_data = current_node->data;
         
         if (((!strcmp(get_priority_char(call_data->priority), priority_name)) || priority == 9) 
            && (!(strcmp(get_status_char(call_data->status), status_name)) || status == 9)) {
@@ -84,15 +86,17 @@ int list_calls(Call *call_list[], int call_list_control, int priority, int statu
             printf(CYAN " Nome do solicitante:  " RESET "%s\n", call_data->name);
             if (call_data->email && call_data->email[0] != '\0') printf(CYAN " Email do solicitante: " RESET "%s\n", call_data->email);
             if (call_data->name_func && call_data->name_func[0] != '\0') printf(CYAN " Nome do funcionário:  " RESET "%s\n", call_data->name_func);
-            if (call_data->created_at) printf(CYAN " Criado em:            " RESET "%s\n", call_data->created_at);
-            if (call_data->updated_at) printf(CYAN " Atualizado em:        " RESET "%s\n", call_data->updated_at);
-            if (call_data->data_fechamento) printf(CYAN " Data de fechamento:   " RESET "%s\n", call_data->data_fechamento);
+            if (call_data->created_at) printf(CYAN " Criado em:            " RESET "%ld\n", call_data->created_at);
+            if (call_data->updated_at) printf(CYAN " Atualizado em:        " RESET "%ld\n", call_data->updated_at);
+            if (call_data->data_fechamento) printf(CYAN " Data de fechamento:   " RESET "%ld\n", call_data->data_fechamento);
             if (call_data->solution && call_data->solution[0] != '\0') printf(CYAN " Solution:             " RESET "%s\n", call_data->solution);
            
             line();
             
             print_caunt++;
         }
+        
+        current_node = current_node->next;
     } 
     
     if (print_caunt) {
@@ -105,19 +109,33 @@ int list_calls(Call *call_list[], int call_list_control, int priority, int statu
         printf(RED "Não há chamados para serem listados.\n" RESET);
     }
 
-    if (select_control) {
+    if (select_control && print_caunt > 0) {
+        int id_is_valid = 0;
         do {
             printf(YELLOW "Digite o Id do chamado que deseja atualizar: " RESET);
             scanf_control = scanf("%d", &selected_id);
             
             if(!scanf_control) {
                 printf(RED "\nDigite apenas números.\n" RESET);
-            } else if (!(selected_id > 0 && selected_id <= call_list_control)) {
-                printf(RED "\nO chamado deve existir.\n" RESET);
+                id_is_valid = 0;
+            } else {
+                id_is_valid = 0;
+                CallNode *temp_node = call_list->head;
+                while (temp_node != NULL) {
+                    if (temp_node->data->id == selected_id) {
+                        id_is_valid = 1;
+                        break;
+                    }
+                    temp_node = temp_node->next;
+                }
+                
+                if (!id_is_valid) {
+                    printf(RED "\nO chamado com ID %d nao existe.\n" RESET, selected_id);
+                }
             }
             
             clean_buffer_stdin();
-        } while (!((scanf_control && selected_id > 0 && selected_id <= call_list_control) && scanf_control));
+        } while (!scanf_control || !id_is_valid);
     }
     
     line();

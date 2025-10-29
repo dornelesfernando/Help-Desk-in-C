@@ -1,15 +1,15 @@
 #include "services.h"
 
-// ====================================================================== HEAP
 void replace(Call *a, Call *b) {
     Call temp = *a;
     *a = *b;
     *b = temp;
 }
 
+// ====================================================================== HEAP
 CallHeap* create_call_list_heap(int capacity) {
     
-    CallHeap* call_list = (CallHeap*)malloc(sizeof(CallHeap*));
+    CallHeap* call_list = (CallHeap*)malloc(sizeof(CallHeap));
     
     if (call_list == NULL) return NULL;
     
@@ -20,7 +20,7 @@ CallHeap* create_call_list_heap(int capacity) {
     return call_list;
 }
 
-void heap_insert (CallHeap *call, Call data) {
+void heap_insert(CallHeap *call, Call data) {
     if (call->size == call->capacity) {
         printf("Overflow do heap\n");
         return;
@@ -47,7 +47,7 @@ void tidying_up(CallHeap *call, int index) {
 // ====================================================================== FIFO
 CallFIFO* create_call_list_fifo(int capacity) {
     
-    CallFIFO* call_list = (CallFIFO*)malloc(sizeof(CallFIFO*));
+    CallFIFO* call_list = (CallFIFO*)malloc(sizeof(CallFIFO));
     
     if (call_list == NULL) return NULL;
     
@@ -66,9 +66,9 @@ void fifo_enqueue(CallFIFO *call, Call data) {
         return;
     }
     
-    call->size++;
-    call->data[call->tail] = data;
     call->tail = (call->tail + 1) % call->capacity;
+    call->data[call->tail] = data;
+    call->size++;
 }
 
 // =================================================================== Service
@@ -84,8 +84,90 @@ CallService *create_call_list_service() {
     return call_list;
 }
 
-void concat_call_list(CallHeap *call_list_heap[], CallFIFO *call_list_fifo[]) {
+CallService *concat_call_list(CallHeap *call_list_heap, CallFIFO *call_list_fifo) {
     
+    CallService *call_list_service = create_call_list_service();
+    if (call_list_service == NULL) {
+       printf("Falha ao criar call_list_service");
+        return NULL;
+    }
+    
+    if(call_list_fifo != NULL && call_list_fifo->size > 0) {
+        // Adiciona os valores da FIFO    
+        for (int i = 0; i < call_list_fifo->size; i++) {
+            int index = (call_list_fifo->front + i) % call_list_fifo->capacity;
+            
+            Call *originalCall = &call_list_fifo->data[index];
+
+            Call *newCall = (Call*) malloc(sizeof(Call));
+            if (newCall == NULL) {
+                perror("Falha ao alocar copia (FIFO)");
+                continue; 
+            }
+            memcpy(newCall, originalCall, sizeof(Call));
+
+            insert_at_end_service(call_list_service, newCall);
+        }
+    }
+    
+    if(call_list_heap != NULL && call_list_heap->size > 0) {
+        for (int i = 0; i < call_list_heap->size; i++) {
+            Call *originalCall = &call_list_heap->data[i];
+            
+            Call *newCall = (Call*) malloc(sizeof(Call));
+            if (newCall == NULL) {
+                perror("Falha ao alocar copia (Heap)");
+                continue;
+            }
+            memcpy(newCall, originalCall, sizeof(Call));
+            
+            insert_at_end_service(call_list_service, newCall);
+        }
+    }
+    
+    return call_list_service;
+}
+
+void insert_at_end_service(CallService *call_list_service, Call *call) {
+    if (call_list_service == NULL || call == NULL) return;
+
+    CallNode *newNode = (CallNode*) malloc(sizeof(CallNode));
+    if (newNode == NULL) {
+        perror("Falha ao alocar no");
+        return;
+    }
+
+    newNode->data = call;
+    newNode->next = NULL;
+    newNode->prev = call_list_service->tail;
+
+    if (call_list_service->head == NULL) {
+        call_list_service->head = newNode;
+        call_list_service->tail = newNode;
+    } else {
+        call_list_service->tail->next = newNode;
+        call_list_service->tail = newNode;
+    }
+
+    call_list_service->size++;
+}
+
+void free_list_service(CallService *call_list) {
+    if (call_list == NULL) return;
+
+    CallNode *current = call_list->head;
+    CallNode *temp;
+
+    while (current != NULL) {
+        temp = current;
+        current = current->next;
+
+        free(temp->data);
+        free(temp);
+    }
+
+    free(call_list);
+    printf("Lista liberada da memoria.\n");
 }
 
 int login(int logado) {
@@ -113,12 +195,6 @@ int login(int logado) {
         }
     }
 }
-
-// void liberar_call_list(Call *call_list[], int call_list_control) {
-//     for (int i = 0; i < call_list_control; i++) {
-//         free(call_list[i]);
-//     }
-// }
 
 void clean_buffer_stdin() {
     int c;

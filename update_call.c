@@ -1,6 +1,28 @@
 #include "update_call.h"
 
-void update_call(Call *call_data, int login_control, char **logs) {
+void update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call_list_fifo, int selected_id, int login_control, char **logs) {
+    
+    // busca o nó
+    CallNode *current_node = call_list->head;
+    Call *call_data = NULL;
+
+    while (current_node != NULL) {
+        if (current_node->data->id == selected_id) {
+            call_data = current_node->data;
+            break;
+        }
+
+        current_node = current_node->next;
+    }
+    
+    if (call_data == NULL) {
+        printf(RED BOLD "Erro: chamado com ID %d não encontrado.\n" RESET, selected_id);
+        char log_msg[128];
+        snprintf(log_msg, sizeof(log_msg), "Tentativa de atualizar ID %d falhou (nao encontrado).", selected_id);
+        adicionar_log_dinamico(logs, log_msg);
+        return;
+    }
+    
     while (1) {
         int index = 0;
         int index_control = 0;
@@ -10,6 +32,7 @@ void update_call(Call *call_data, int login_control, char **logs) {
         int priority = 0;
         char email[100];
         int email_control = 0;
+        int search_control = 0;
         
         char log_message[128];
         snprintf(log_message, sizeof(log_message), "Listando chamado ID: %d.", call_data->id);
@@ -92,6 +115,7 @@ void update_call(Call *call_data, int login_control, char **logs) {
                         case 1:
                             printf(CYAN  " [1] " RED "--> " RESET);
                             scanf(" %149[^\n]", call_data->title);
+                            clean_buffer_stdin();
                             break;
                         case 2:
                             printf(CYAN   "     0) " YELLOW "Aberto" RESET);
@@ -122,7 +146,6 @@ void update_call(Call *call_data, int login_control, char **logs) {
                                             call_data->status = ABERTO;
                                             break;
                                     }
-                                    priority_control = 1;
                                 } else {
                                     printf(RED  " --> Status inválido\n" RESET);
                                 }
@@ -172,15 +195,18 @@ void update_call(Call *call_data, int login_control, char **logs) {
                         case 4:
                             printf(CYAN  " [4] " RED "--> " RESET);
                             scanf(" %99[^\n]", call_data->name_func);
+                            clean_buffer_stdin();
                             break;
                         case 5:
                             printf(CYAN  " [5] " RED "--> " RESET);
                             scanf(" %99[^\n]", call_data->name);
+                            clean_buffer_stdin();
                             break;
                         case 6:
                             do {
                                 printf(CYAN  " [6] " RED "--> " RESET);
                                 scanf(" %99[^\n]", email);
+                                clean_buffer_stdin();
     
                                 char* arroba = strchr(email, '@');
                                 char* dot = strchr(email, '.');
@@ -198,10 +224,12 @@ void update_call(Call *call_data, int login_control, char **logs) {
                         case 7:
                             printf(CYAN  " [7] " RED "--> " RESET);
                             scanf(" %1023[^\n]", call_data->desc);
+                            clean_buffer_stdin();
                             break;
                         case 8:
                             printf(CYAN  " [8] " RED "--> " RESET);
                             scanf(" %1023[^\n]", call_data->solution);
+                            clean_buffer_stdin();
                             break;
                     }
                 } else {
@@ -210,6 +238,7 @@ void update_call(Call *call_data, int login_control, char **logs) {
                             
                             printf(CYAN  " [1] " RED "--> " RESET);
                             scanf(" %149[^\n]", call_data->title);
+                            clean_buffer_stdin();
                             break;
                         case 2:
                             do {
@@ -240,7 +269,6 @@ void update_call(Call *call_data, int login_control, char **logs) {
                                             call_data->priority = BAIXA;
                                             break;
                                     }
-                                    priority_control = 1;
                                 } else {
                                     printf(RED  " --> priority inválido\n" RESET);
                                 }
@@ -252,11 +280,13 @@ void update_call(Call *call_data, int login_control, char **logs) {
                         case 3:
                             printf(CYAN  " [3] " RED "--> " RESET);
                             scanf(" %99[^\n]", call_data->name);
+                            clean_buffer_stdin();
                             break;
                         case 4:
                             do {
                                 printf(CYAN  " [4] " RED "--> " RESET);
                                 scanf(" %99[^\n]", email);
+                                clean_buffer_stdin();
     
                                 char* arroba = strchr(email, '@');
                                 char* dot = strchr(email, '.');
@@ -274,6 +304,7 @@ void update_call(Call *call_data, int login_control, char **logs) {
                         case 5:
                             printf(CYAN  " [5] " RED "--> " RESET);
                             scanf(" %1023[^\n]", call_data->desc);
+                            clean_buffer_stdin();
                             break;
                     }
                 }
@@ -282,6 +313,30 @@ void update_call(Call *call_data, int login_control, char **logs) {
             }
             
         } while (!(scanf_control && index_control > 0 && index_control <= index));
+        
+        call_data->updated_at = time(NULL);
+        
+        // Atualiza o dado na sua fila raiz (fifo ou heap)
+        if (call_list_heap != NULL) {
+            for (int i = 0; i < call_list_heap->size; i++) {
+                if (call_list_heap->data[i].id == selected_id) {
+                    call_list_heap->data[i] = *call_data;
+                    search_control = 1;
+                    break;
+                }
+            }
+        }
+    
+        if (!search_control && call_list_fifo != NULL) {
+            for (int i = 0; i < call_list_fifo->size; i++) {
+                int index = (call_list_fifo->front + i) % call_list_fifo->capacity;
+                
+                if (call_list_fifo->data[index].id == selected_id) {
+                    call_list_fifo->data[i] = *call_data;
+                    break;
+                }
+            }
+        }
         
         clear();
     }
