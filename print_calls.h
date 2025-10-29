@@ -9,6 +9,6 @@
 #include "logs.h"
 #include "structs.h"
 
-void print_calls(Call *call_data, char **logs);
+void print_calls(CallService *call_data, int selected_id, char **logs);
 
 #endif // PRINT_CALLS_H

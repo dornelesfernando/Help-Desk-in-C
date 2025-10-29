@@ -1,6 +1,27 @@
 #include "print_calls.h"
 
-void print_calls(Call *call_data, char **logs) {
+void print_calls(CallService *call_list, int selected_id, char **logs) {
+    
+    CallNode *current_node = call_list->head;
+    Call *call_data = NULL;
+
+    while (current_node != NULL) {
+        if (current_node->data->id == selected_id) {
+            call_data = current_node->data;
+            break;
+        }
+
+        current_node = current_node->next;
+    }
+    
+    if (call_data == NULL) {
+        printf(RED BOLD "Erro: chamado com ID %d não encontrado.\n" RESET, selected_id);
+        char log_msg[128];
+        snprintf(log_msg, sizeof(log_msg), "Tentativa de atualizar ID %d falhou (nao encontrado).", selected_id);
+        adicionar_log_dinamico(logs, log_msg);
+        return;
+    }
+    
     char log_message[128];
     snprintf(log_message, sizeof(log_message), "Listando chamado ID: %d.", call_data->id);
     adicionar_log_dinamico(logs, log_message);
