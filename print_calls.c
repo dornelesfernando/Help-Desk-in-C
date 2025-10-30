@@ -29,11 +29,6 @@ void print_calls(CallService *call_list, int selected_id, char **logs) {
     // Buffer para formatar as datas
     char data_str[100];
     struct tm *tm_info;
-
-    if (call_data == NULL) {
-        printf(RED BOLD "Erro: chamado não encontrado (NULL).\n" RESET);
-        return;
-    }
     
     header();
     line();
@@ -82,4 +77,3 @@ void print_calls(CallService *call_list, int selected_id, char **logs) {
 
     line();
 }
-
