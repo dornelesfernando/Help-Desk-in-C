@@ -1,10 +1,10 @@
 <a id="readme-top"></a>
 
-<img width="1896" height="834" alt="Captura de tela 2025-10-22 233104" src="https://github.com/user-attachments/assets/a0b1dd85-0424-4625-9d16-d667d65b0a22" />
+<img width="1916" height="875" alt="image" src="https://github.com/user-attachments/assets/bd4bc5a3-d1a0-47bd-83f6-c7c6582cdfff" />
 
 <div align="center">
     
-  ![https://img.shields.io/badge/status-em--desenvolvimento-blueviolet?style=for-the-badge](https://img.shields.io/badge/status-em--desenvolvimento-blueviolet?style=for-the-badge)
+  ![https://img.shields.io/badge/status-finalizado-blueviolet?style=for-the-badge](https://img.shields.io/badge/status-finalizado-blueviolet?style=for-the-badge)
   [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge)](https://opensource.org/licenses/Apache-2.0)
     
   ![https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
@@ -24,10 +24,10 @@
   <br />
   <br />
   <a href="#começando-ambiente-e-instalacao">Baixe, Configure e Execute</a>
-  <!--· -->
-  <!-- <a href="https://github.com/dornelesfernando/HelpDesk_C_EstruturaDeDados/issues/new?template=bug-report-%F0%9F%90%9B.md">Reportar Bug</a> -->
-  <!-- · -->
-  <!-- <a href="https://github.com/dornelesfernando/HelpDesk_C_EstruturaDeDados/issues/new?template=feature-request-%E2%9C%A8.md">Sugerir Melhoria</a> -->
+  ·
+  <a href="https://github.com/dornelesfernando/HelpDesk_C_EstruturaDeDados/issues/new?template=bug-report-%F0%9F%90%9B.md">Reportar Bug</a>
+  ·
+  <a href="https://github.com/dornelesfernando/HelpDesk_C_EstruturaDeDados/issues/new?template=feature-request-%E2%9C%A8.md">Sugerir Melhoria</a>
 </p>
 
 <a id="visao-geral-do-projeto"></a>
@@ -86,11 +86,9 @@ A plataforma é dividida em módulos que cobrem as principais áreas de gestão 
 - **Ponteiros e Alocação Dinâmica:** `malloc`, `realloc` e `free` são usados para gerenciar a memória dos chamados e das filas.
 - **Fila de Prioridade (Max-Heap):** Implementada usando um array.
     - `heap_insert`: Adiciona um novo chamado e usa a função `tidying_up` (heapify-up) para manter a propriedade da heap.
-    - `heap_remove/_max`: (A ser implementado) Remove o elemento raiz (maior prioridade) e usa `arruma_abaixo` (heapify-down) para reordenar.
 - **Fila (FIFO):** Implementada usando um array circular com ponteiros `front` e `tail`.
     - `init_fifo`: Aloca memória para a fila e inicializa os índices.
     - `fifo_enqueue`: Adiciona um chamado ao final da fila (posição `tail`).
-    - `fifo_dequeue`: (A ser implementado) Remove um chamado do início da fila (posição `front`).
 
 <p align="right">(<a href="#readme-top">voltar ao topo</a>)</p>
 
@@ -147,14 +145,14 @@ Após a execução, o sistema apresentará o menu principal no terminal. Siga as
 3.  **Ver todos os chamados:** Lista todos os chamados no sistema.
 4.  **Ver lista de baixa prioridade (normal):** Mostra apenas chamados da fila FIFO.
 5.  **Ver lista por prioridade e status:** Permite filtrar a visualização.
-6.  **Ver último chamado aberto:** Exibe os detalhes do último chamado criado nesta sessão.
+6.  **Ver último chamado aberto/atualizado:** Exibe os detalhes do último chamado criado nesta sessão.
 7.  **Visualizar log's:** Mostra os logs do sistema.
 8.  **Acessar menu do administrador:** Pede uma senha para logar.
 9.  **Sair do sistema:** Encerra o programa.
 
 **Menu do Administrador (Logado):**
 -   **Atender chamado:** Inicia o fluxo de atendimento, puxando automaticamente da Heap ou da FIFO, conforme a regra de negócio.
--   **Cancelar chamado:** Permite remover um chamado do sistema.
+-   **Cancelar chamado:** Permite fechar um chamado do sistema.
 -   **Atualizar chamado:** Permite ao administrador modificar qualquer chamado.
 -   ... (e outras funções de gerenciamento).
 
