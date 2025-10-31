@@ -5,7 +5,6 @@
     #include <time.h>
     
     #include "services.h"
-    // #include "structs.h"
     #include "menu.h"
     #include "logs.h"
     
@@ -14,6 +13,6 @@
     #include "print_calls.h"
     #include "list_calls.h"
     #include "update_call.h"
-    // #include "answer_call.h"
+    #include "answer_call.h"
 
 #endif // MAIN_H

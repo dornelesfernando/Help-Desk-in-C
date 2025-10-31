@@ -9,7 +9,7 @@ int update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call
 
     while (current_node != NULL) {
         if (current_node->data->id == selected_id) {
-            call_data = current_node->data;
+            call_data = current_node->data; 
             break;
         }
 
@@ -30,7 +30,7 @@ int update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call
         
         if (cancel_control) {
             call_data->status = FECHADO;
-            call_data->updated_at = time(NULL);
+            call_data->data_fechamento = time(NULL);
             adicionar_log_dinamico(logs, "Chamado fechado.");
         } else {
             int index = 0;
@@ -279,6 +279,7 @@ int update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call
                                                 call_data->priority = BAIXA;
                                                 break;
                                         }
+                                        priority_control = 1;
                                     } else {
                                         printf(RED  " --> priority inválido\n" RESET);
                                     }

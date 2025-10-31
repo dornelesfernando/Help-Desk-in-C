@@ -70,18 +70,18 @@ int list_calls_service(CallService *call_list, int priority, int status, int sel
             
             tm_info = localtime(&call_data->created_at);
             strftime(data_str, sizeof(data_str), "%d/%m/%Y às %H:%M:%S", tm_info);
-            printf(CYAN " Criado em:  " RESET "%s\n", data_str);
+            printf(CYAN " Criado em:            " RESET "%s\n", data_str);
         
             if (call_data->updated_at > 0) {
                 tm_info = localtime(&call_data->updated_at);
                 strftime(data_str, sizeof(data_str), "%d/%m/%Y às %H:%M:%S", tm_info);
-                printf(CYAN " Atualizado: " RESET "%s\n", data_str);
+                printf(CYAN " Atualizado:           " RESET "%s\n", data_str);
             }
             
             if (call_data->data_fechamento > 0) {
                 tm_info = localtime(&call_data->data_fechamento);
                 strftime(data_str, sizeof(data_str), "%d/%m/%Y às %H:%M:%S", tm_info);
-                printf(CYAN " Fechado em: " RESET BOLD "%s\n", data_str);
+                printf(CYAN " Fechado em:           " RESET BOLD "%s\n", data_str);
             }
             
             if (call_data->solution && call_data->solution[0] != '\0') printf(CYAN " Solution:             " RESET "%s\n", call_data->solution);
