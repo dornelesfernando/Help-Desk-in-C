@@ -118,12 +118,20 @@ int main() {
                         printf(GREEN "Atualizando chamado...\n" RESET); 
                         adicionar_log_dinamico(&logs, "Atualizando chamado.");
                         
-                        params.last_opened_call_id = update_call(call_service, call_list_heap, call_list_fifo, params.returned_call_id, 1, 0, &logs);
+                        params.returned_call_id_aux = update_call(call_service, call_list_heap, call_list_fifo, params.returned_call_id, 1, 0, &logs);
+                    
+                        if (params.returned_call_id_aux != 9997) params.last_opened_call_id = params.returned_call_id_aux;
+                    }
+                    
+                    if (params.returned_call_id_aux == 9997) {
+                        line();
+                        printf(RED "Chamado não pode atualizado pois está fechado/resolvido.\n" RESET);
+                        adicionar_log_dinamico(&logs, "Chamado não pode atualizado pois está fechado/resolvido.");
                     }
                     
                     free_list_service(call_service, &logs);
                     enter();
-                    if (params.returned_call_id_aux != 9999) {
+                    if (params.returned_call_id_aux != 9999 && params.returned_call_id_aux != 9997) {
                         pre_log();
                         printf(GREEN "Chamado atualizado com sucesso!\n" RESET);
                         adicionar_log_dinamico(&logs, "Chamado atualizado com sucesso.");
@@ -210,14 +218,24 @@ int main() {
                         printf(GREEN "Atualizando chamado...\n" RESET); 
                         adicionar_log_dinamico(&logs, "Atualizando chamado.");
                         
-                        params.last_opened_call_id = update_call(call_service, call_list_heap, call_list_fifo, params.returned_call_id, 0, 0, &logs);
+                        params.returned_call_id_aux = update_call(call_service, call_list_heap, call_list_fifo, params.returned_call_id, 0, 0, &logs);
+                    
+                        if (params.returned_call_id_aux != 9997) params.last_opened_call_id = params.returned_call_id_aux;
+                    }
+                    
+                    if (params.returned_call_id_aux == 9997) {
+                        line();
+                        printf(RED "Chamado não pode atualizado pois está fechado/resolvido.\n" RESET);
+                        adicionar_log_dinamico(&logs, "Chamado não pode atualizado pois está fechado/resolvido.");
                     }
                     
                     free_list_service(call_service, &logs);
                     enter();
-                    pre_log();
-                    printf(GREEN "Chamado atualizado com sucesso!\n" RESET);
-                    adicionar_log_dinamico(&logs, "Chamado atualizado com sucesso.");
+                    if (params.returned_call_id_aux != 9999 && params.returned_call_id_aux != 9997) {
+                        pre_log();
+                        printf(GREEN "Chamado atualizado com sucesso!\n" RESET);
+                        adicionar_log_dinamico(&logs, "Chamado atualizado com sucesso.");
+                    } 
                     break;
                 case 3:
                     printf(GREEN "Mostrando todos os chamados...\n" RESET); 
