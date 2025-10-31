@@ -33,6 +33,8 @@ int update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call
             call_data->data_fechamento = time(NULL);
             adicionar_log_dinamico(logs, "Chamado fechado.");
         } else {
+            if ((call_data->status == FECHADO || call_data->status == RESOLVIDO) && !login_control ) return 9997;
+            
             int index = 0;
             int index_control = 0;
             int scanf_control = 0;
@@ -70,9 +72,9 @@ int update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call
             
             if (login_control) {
                 if (strcmp(call_data->name_func, "") == 0) {
-                    printf(CYAN " Atribuído a: " RESET "Nenhum técnico atribuído\n");
+                    printf(YELLOW " [%d] " CYAN "Atribuído a: " RESET "Nenhum técnico atribuído\n", ++index);
                 } else {
-                    printf(YELLOW " [%d] " CYAN "Atribuído a: " RESET YELLOW "%s\n", ++index, call_data->name_func);
+                    printf(YELLOW " [%d] " CYAN "Atribuído a: " RESET "%s\n", ++index, call_data->name_func);
                 }
             }
         
