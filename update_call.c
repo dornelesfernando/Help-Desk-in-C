@@ -1,6 +1,7 @@
 #include "update_call.h"
 
-void update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call_list_fifo, int selected_id, int login_control, int cancel_control, char **logs) {
+int update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call_list_fifo, int selected_id, int login_control, int cancel_control, char **logs) {
+    char log_msg[128];
     
     // busca o nó
     CallNode *current_node = call_list->head;
@@ -8,7 +9,7 @@ void update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *cal
 
     while (current_node != NULL) {
         if (current_node->data->id == selected_id) {
-            call_data = current_node->data;
+            call_data = current_node->data; 
             break;
         }
 
@@ -17,18 +18,20 @@ void update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *cal
     
     if (call_data == NULL) {
         printf(RED BOLD "Erro: chamado com ID %d não encontrado.\n" RESET, selected_id);
-        char log_msg[128];
         snprintf(log_msg, sizeof(log_msg), "Tentativa de atualizar ID %d falhou (nao encontrado).", selected_id);
         adicionar_log_dinamico(logs, log_msg);
-        return;
+        return 9999;
     }
+    snprintf(log_msg, sizeof(log_msg), "Chamado ID %d localizado.", selected_id);
+    adicionar_log_dinamico(logs, log_msg);
     
     while (1) {
         int search_control = 0;
         
         if (cancel_control) {
             call_data->status = FECHADO;
-            call_data->updated_at = time(NULL);
+            call_data->data_fechamento = time(NULL);
+            adicionar_log_dinamico(logs, "Chamado fechado.");
         } else {
             int index = 0;
             int index_control = 0;
@@ -36,20 +39,21 @@ void update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *cal
             int status = 0;
             int priority_control = 0;
             int priority = 0;
-            char email[100];
             int email_control = 0;
-            
+            char email[100];
             char log_message[128];
-            snprintf(log_message, sizeof(log_message), "Listando chamado ID: %d.", call_data->id);
-            adicionar_log_dinamico(logs, log_message);
             
             // Buffer para formatar as datas
             char data_str[100];
             struct tm *tm_info;
-        
+            
+            snprintf(log_message, sizeof(log_message), "Listando chamado ID: %d.", call_data->id);
+            adicionar_log_dinamico(logs, log_message);
+            
             if (call_data == NULL) {
                 printf(RED BOLD "Erro: chamado não encontrado (NULL).\n" RESET);
-                return;
+                adicionar_log_dinamico(logs, "Erro: chamado não encontrado (NULL).");
+                return 9999;
             }
             
             header();
@@ -111,8 +115,9 @@ void update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *cal
             do {
                 printf(YELLOW "\n  --> Digite o índex da informação que deseja alterar: " RESET);
                 scanf_control = scanf("%d", &index_control);
+                clean_buffer_stdin();
                 
-                if (scanf_control) if (index_control == 9) return;
+                if (scanf_control) if (index_control == 9) return call_data->id;
         
                 if (scanf_control == 1 && index_control > 0 && index_control <= index) {
                     if(login_control) {
@@ -274,6 +279,7 @@ void update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *cal
                                                 call_data->priority = BAIXA;
                                                 break;
                                         }
+                                        priority_control = 1;
                                     } else {
                                         printf(RED  " --> priority inválido\n" RESET);
                                     }
@@ -344,8 +350,8 @@ void update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *cal
             }
         }
         
-        clear();
+        if (cancel_control) return 9998;
         
-        if (cancel_control) return;
+        clear();
     }
 }

@@ -1,11 +1,11 @@
 #include "menu.h"
 
 void clear() {
-#ifdef _WIN32
-    system("cls");
-#else
-    system("clear");
-#endif
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
 }
 
 void line() {
@@ -23,21 +23,19 @@ void ascii_logo() {
     printf(RESET);
 }
 
-
-
 void header() {
     line();
     ascii_logo();
     printf(GREEN BOLD "                     SISTEMA HELP DESK\n" RESET);
     printf("\n");
-    printf(YELLOW "- Bem-vindo ao sistema de ajuda técnica!\n" RESET);
+    printf(YELLOW " - Bem-vindo ao sistema de ajuda técnica!\n" RESET);
     line();
 }
 
 void footer() {
     line();
-    printf(MAGENTA "- Até a próxima!\n");
-    printf("- Criado por: " CYAN "~Dorneles\n" RESET);
+    printf(MAGENTA " - Até a próxima!\n");
+    printf(" - Criado por: " CYAN "~Dorneles\n" RESET);
     line();
 }
 
@@ -57,12 +55,12 @@ void menu_inicial() {
     printf(GREEN  " [3] " RESET "Ver todos os chamados\n");
     printf(GREEN  " [4] " RESET "Ver lista de baixa prioridade (normal)\n");
     printf(GREEN  " [5] " RESET "Ver lista por prioridade e status\n");
-    printf(GREEN  " [6] " RESET "Ver ultimo chamado aberto\n");
+    printf(GREEN  " [6] " RESET "Ver ultimo chamado aberto/atualizado\n");
     printf(YELLOW " [7] " RESET "Visualizar log's\n");
     printf(CYAN   " [8] " RESET "Acessar menu do administrador\n");
     printf(RED    " [9] " RESET "Sair do sistema\n");
     printf(BLUE "-------------------------------------------------------------\n" RESET);
-    printf(YELLOW "Selecione uma opção: " RESET);
+    printf(YELLOW " Selecione uma opção: " RESET);
 }
 
 void menu_administrador() {
@@ -71,11 +69,12 @@ void menu_administrador() {
     printf(GREEN  " [1] " RESET "Atender chamado\n");
     printf(GREEN  " [2] " RESET "Cancelar chamado\n");
     printf(GREEN  " [3] " RESET "Atualizar chamado\n");
+    printf(GREEN  " [4] " RESET "Ver todos os chamados\n");
     printf(YELLOW " [7] " RESET "Visualizar log's\n");
-    printf(CYAN   " [8] " RESET "Acessar menu do principal\n");
+    printf(CYAN   " [8] " RESET "Voltar ao menu principal\n");
     printf(RED    " [9] " RESET "Sair do sistema\n");
     printf(BLUE "-------------------------------------------------------------\n" RESET);
-    printf(YELLOW "Selecione uma opção: " RESET);
+    printf(YELLOW " Selecione uma opção: " RESET);
 }
 
 void pre_log() {
@@ -101,4 +100,10 @@ const char* get_priority_styled(PriorityEnum p) {
         case URGENTE: return BOLD RED "Urgente" RESET;
         default:      return "Desconhecida";
     }
+}
+
+void enter() {
+    printf("\n\nPressione ENTER para voltar ao menu...");
+    getchar();
+    clear();
 }

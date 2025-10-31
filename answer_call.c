@@ -1,6 +1,7 @@
 #include "answer_call.h"
 
 int answer_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call_list_fifo, char **logs) {
+    char log_msg[128];
     
     // busca o nó
     CallNode *current_node = call_list->head;
@@ -20,24 +21,20 @@ int answer_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call
         adicionar_log_dinamico(logs, "Erro: Nenhum chamado à ser atendido.");
         return 9999;
     }
+    snprintf(log_msg, sizeof(log_msg), "Chamado ID %d localizado.", call_data->id);
+    adicionar_log_dinamico(logs, log_msg);
     
     int search_control = 0;
     char resposta_sn;
-    int scanf_control;
-    
-    char log_message[128];
-    snprintf(log_message, sizeof(log_message), "Listando chamado ID: %d. para atendimento", call_data->id);
-    adicionar_log_dinamico(logs, log_message);
+    int scanf_control = 0;
     
     // Buffer para formatar as datas
     char data_str[100];
     struct tm *tm_info;
-
-    if (call_data == NULL) {
-        printf(RED BOLD "Erro: chamado não encontrado (NULL).\n" RESET);
-        return 9999;
-    }
     
+    snprintf(log_msg, sizeof(log_msg), "Listando chamado ID: %d. para atendimento", call_data->id);
+    adicionar_log_dinamico(logs, log_msg);
+
     header();
     printf("  DETALHES DO CHAMADO ID: " YELLOW "%d" RESET " SENDO ATENDIDO\n", call_data->id);
     line();
@@ -147,6 +144,5 @@ int answer_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call
         }
     }
     
-    clear();
     return call_data->id;
 }

@@ -6,35 +6,48 @@ void replace(Call *a, Call *b) {
     *b = temp;
 }
 
-// ====================================================================== HEAP
-CallHeap* create_call_list_heap(int capacity) {
+// // ====================================================================== HEAP
+CallHeap* create_call_list_heap(int capacity, char **logs) {
     
     CallHeap* call_list = (CallHeap*)malloc(sizeof(CallHeap));
     
-    if (call_list == NULL) return NULL;
+    if (call_list == NULL) {
+        adicionar_log_dinamico(logs, "Falha ao criar lista Heap.");
+        return NULL;
+    }
     
     call_list->data = (Call*)malloc(capacity * sizeof(Call));
     call_list->capacity = capacity;
     call_list->size = 0;
     
+    adicionar_log_dinamico(logs, "Lista Heap criada com sucesso.");
     return call_list;
 }
 
-void heap_insert(CallHeap *call, Call data) {
+void heap_insert(CallHeap *call, Call data, char **logs) {
     if (call->size == call->capacity) {
-        printf("Overflow do heap\n");
-        return;
+        adicionar_log_dinamico(logs, "Overflow do Heap. Tentando expandir.");
+        
+        int success = expand_heep(call, logs);
+        if (!success) {
+            adicionar_log_dinamico(logs, "Falha ao expandir. Falha ao inserir chamado.");
+            return;
+        }
     }
     
     call->size++;
     int index = call->size - 1;
     call->data[index] = data;
-    tidying_up(call, index);
+    tidying_up(call, index, logs);
+    adicionar_log_dinamico(logs, "Chamado adicionado à lista Heap.");
 }
 
-void tidying_up(CallHeap *call, int index) {
-    if (index == 0) return;
-
+void tidying_up(CallHeap *call, int index, char **logs) {
+    if (index == 0) {
+        adicionar_log_dinamico(logs, "Lista Heap não precisa ser organizada.");
+        return;
+    }
+    
     int father_index = (index - 1) / 2;
 
     while (index > 0 && get_priority_int(call->data[index].priority) > get_priority_int(call->data[father_index].priority)) {
@@ -42,14 +55,37 @@ void tidying_up(CallHeap *call, int index) {
         index = father_index;
         father_index = (index - 1) / 2;
     }
+    
+    adicionar_log_dinamico(logs, "Lista Heap organizada.");
 }
 
-// ====================================================================== FIFO
-CallFIFO* create_call_list_fifo(int capacity) {
+int expand_heep(CallHeap *call, char **logs) {
+    int new_capacity = call->capacity + 1;
     
+    Call *new_data = (Call*) realloc(call->data, new_capacity * sizeof(Call));
+    
+    if (new_data == NULL) {
+        adicionar_log_dinamico(logs, "Falha ao expandir a lista Heap.");
+        return 0;
+    }
+    
+    call->data = new_data;
+    call->capacity = new_capacity;
+    
+    char log_msg[128];
+    snprintf(log_msg, sizeof(log_msg), "Lista Heap expandida com sucesso. Nova capacidade: %d", new_capacity);
+    adicionar_log_dinamico(logs, log_msg);
+    return 1;
+}
+
+// // ====================================================================== FIFO
+CallFIFO* create_call_list_fifo(int capacity, char **logs) {
     CallFIFO* call_list = (CallFIFO*)malloc(sizeof(CallFIFO));
     
-    if (call_list == NULL) return NULL;
+    if (call_list == NULL) {
+        adicionar_log_dinamico(logs, "Falha ao criar lista FIFO.");
+        return NULL;
+    }
     
     call_list->data = (Call*)malloc(capacity * sizeof(Call));
     call_list->capacity = capacity;
@@ -57,38 +93,69 @@ CallFIFO* create_call_list_fifo(int capacity) {
     call_list->front = 0;
     call_list->tail = -1;
 
+    adicionar_log_dinamico(logs, "Lista FIFO criada com sucesso.");
     return call_list;
 }
 
-void fifo_enqueue(CallFIFO *call, Call data) {
+void fifo_enqueue(CallFIFO *call, Call data, char **logs) {
     if (call->size == call->capacity) {
-        printf("Overflow da fifo\n");
-        return;
+        adicionar_log_dinamico(logs, "Overflow do FIFO. Tentando expandir.");
+        
+        int success = expand_fifo(call, logs);
+        if (!success) {
+            adicionar_log_dinamico(logs, "Falha ao expandir. Falha ao inserir chamado.");
+            return;
+        }
     }
     
     call->tail = (call->tail + 1) % call->capacity;
     call->data[call->tail] = data;
     call->size++;
+    adicionar_log_dinamico(logs, "Chamado adicionado à fila FIFO.");
+}
+
+int expand_fifo(CallFIFO *call, char **logs) {
+    int new_capacity = call->capacity + 1;
+    
+    Call *new_data = (Call*) realloc(call->data, new_capacity * sizeof(Call));
+    
+    if (new_data == NULL) {
+        adicionar_log_dinamico(logs, "Falha ao expandir a fila FIFO.");
+        return 0;
+    }
+    
+    call->data = new_data;
+    call->capacity = new_capacity;
+    
+    char log_msg[128];
+    snprintf(log_msg, sizeof(log_msg), "Fila FIFO expandida com sucesso. Nova capacidade: %d", new_capacity);
+    adicionar_log_dinamico(logs, log_msg);
+    return 1;
 }
 
 // =================================================================== Service
-CallService *create_call_list_service() {
+CallService *create_call_list_service(char **logs) {
     CallService *call_list = (CallService*) malloc(sizeof(CallService));
     
-    if (call_list == NULL) return NULL;
+    if (call_list == NULL) {
+        adicionar_log_dinamico(logs, "Falha ao criar lista Service.");
+        return NULL;
+    }
     
     call_list->head = NULL;
     call_list->tail = NULL;
     call_list->size = 0;
     
+    adicionar_log_dinamico(logs, "Lista Service criada com sucesso.");
     return call_list;
 }
 
-CallService *concat_call_list(CallHeap *call_list_heap, CallFIFO *call_list_fifo) {
+CallService *concat_call_list(CallHeap *call_list_heap, CallFIFO *call_list_fifo, char **logs) {
     
-    CallService *call_list_service = create_call_list_service();
+    CallService *call_list_service = create_call_list_service(logs);
     if (call_list_service == NULL) {
-       printf("Falha ao criar call_list_service");
+        printf("Falha ao criar lista Service");
+        adicionar_log_dinamico(logs, "Falha ao criar lista Service.");
         return NULL;
     }
     
@@ -98,14 +165,18 @@ CallService *concat_call_list(CallHeap *call_list_heap, CallFIFO *call_list_fifo
             
             Call *newCall = (Call*) malloc(sizeof(Call));
             if (newCall == NULL) {
-                perror("Falha ao alocar copia (Heap)");
+                printf("Falha ao alocar copia (Heap)");
+                adicionar_log_dinamico(logs, "Falha ao alocar copia (Heap).");
                 continue;
             }
             memcpy(newCall, originalCall, sizeof(Call));
             
-            insert_at_end_service(call_list_service, newCall);
+            insert_at_end_service(call_list_service, newCall, logs);
         }
+        
+        adicionar_log_dinamico(logs, "Lista Heap adicionada à lista de serviço.");
     }
+    
     
     if(call_list_fifo != NULL && call_list_fifo->size > 0) {
         // Adiciona os valores da FIFO    
@@ -116,24 +187,27 @@ CallService *concat_call_list(CallHeap *call_list_heap, CallFIFO *call_list_fifo
 
             Call *newCall = (Call*) malloc(sizeof(Call));
             if (newCall == NULL) {
-                perror("Falha ao alocar copia (FIFO)");
+                printf("Falha ao alocar copia (FIFO)");
+                adicionar_log_dinamico(logs, "Falha ao alocar copia (FIFO).");
                 continue; 
             }
             memcpy(newCall, originalCall, sizeof(Call));
 
-            insert_at_end_service(call_list_service, newCall);
+            insert_at_end_service(call_list_service, newCall, logs);
         }
+        adicionar_log_dinamico(logs, "Fila FIFO adicionada à lista de serviço.");
     }
     
     return call_list_service;
 }
 
-void insert_at_end_service(CallService *call_list_service, Call *call) {
+void insert_at_end_service(CallService *call_list_service, Call *call, char **logs) {
     if (call_list_service == NULL || call == NULL) return;
 
     CallNode *newNode = (CallNode*) malloc(sizeof(CallNode));
     if (newNode == NULL) {
-        perror("Falha ao alocar no");
+        printf("Falha ao alocar nó");
+        adicionar_log_dinamico(logs, "Falha ao alocar nó.");
         return;
     }
 
@@ -152,24 +226,7 @@ void insert_at_end_service(CallService *call_list_service, Call *call) {
     call_list_service->size++;
 }
 
-void free_list_service(CallService *call_list) {
-    if (call_list == NULL) return;
-
-    CallNode *current = call_list->head;
-    CallNode *temp;
-
-    while (current != NULL) {
-        temp = current;
-        current = current->next;
-
-        free(temp->data);
-        free(temp);
-    }
-
-    free(call_list);
-    printf("Lista liberada da memoria.\n");
-}
-
+// login control
 int login(int logado) {
     
     if(logado) {
@@ -183,10 +240,10 @@ int login(int logado) {
         char pass_in[64];
     
         printf("Usuário: ");
-        scanf("%63s", user_in);  // lê string (até 63 chars + '\0')
+        scanf("%63s", user_in);
     
         printf("Senha: ");
-        scanf("%63s", pass_in);  // lê string (até 63 chars + '\0')
+        scanf("%63s", pass_in);
     
         if (strcmp(user_in, USER) == 0 && strcmp(pass_in, PASS) == 0) {
             return 1;
@@ -206,6 +263,7 @@ int test_cancel(char* input) {
     return 0;
 }
 
+// Status and Priority
 const char* get_status_char(StatusEnum s) {
     switch (s) {
         case ABERTO:           return "Aberto";
@@ -234,4 +292,47 @@ const int get_priority_int(PriorityEnum p) {
         case URGENTE: return 3;
         default:      return -1;
     }
+}
+
+// Clean memory
+void free_heap(CallHeap *heap, char **logs) {
+    if (heap == NULL) return;
+
+    if (heap->data != NULL) {
+        free(heap->data);
+        heap->data = NULL; 
+    }
+
+    free(heap);
+    adicionar_log_dinamico(logs, "Lista Heap liberada.");
+}
+
+void free_fifo(CallFIFO *fifo, char **logs) {
+    if (fifo == NULL) return;
+
+    if (fifo->data != NULL) {
+        free(fifo->data);
+        fifo->data = NULL;
+    }
+
+    free(fifo);
+    adicionar_log_dinamico(logs, "Fila FIFO liberada.");
+}
+
+void free_list_service(CallService *call_list, char **logs) {
+    if (call_list == NULL) return;
+
+    CallNode *current = call_list->head;
+    CallNode *temp;
+
+    while (current != NULL) {
+        temp = current;
+        current = current->next;
+
+        free(temp->data);
+        free(temp);
+    }
+
+    free(call_list);
+    adicionar_log_dinamico(logs, "Lista Service liberada.");
 }
