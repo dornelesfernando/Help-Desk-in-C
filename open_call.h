@@ -1,7 +1,5 @@
 #ifndef OPEN_CALL_H
 #define OPEN_CALL_H
-
-    // #include <stdio.h>
     
     #include "structs.h"
     #include "menu.h"

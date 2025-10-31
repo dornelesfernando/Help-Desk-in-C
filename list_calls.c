@@ -105,11 +105,13 @@ int list_calls_service(CallService *call_list, int priority, int status, int sel
             adicionar_log_dinamico(logs, log_message);
         }
     } else {
-        printf(RED "Não há chamados para serem listados.\n" RESET);
+        printf(RED " Não há chamados para serem listados.\n" RESET);
         adicionar_log_dinamico(logs, "Não há chamados para serem listados.");
+        return 9999;
     }
 
     if (select_control && print_caunt > 0) {
+        adicionar_log_dinamico(logs, "Selecionando chamado.");
         int id_is_valid = 0;
         do {
             printf(YELLOW "Digite o Id do chamado que deseja atualizar: " RESET);
@@ -142,7 +144,7 @@ int list_calls_service(CallService *call_list, int priority, int status, int sel
     return selected_id;
 }
 
-void select_parameter(int *priority, int *status) {
+void select_parameter(int *priority, int *status, char **logs) {
     int selected_control = 0;
     int scanf_control = 0;
     
@@ -197,5 +199,6 @@ void select_parameter(int *priority, int *status) {
     
     *status = selected_control;
     
+    adicionar_log_dinamico(logs, "Parâmetros selecionados e validados.");
     line();
 }

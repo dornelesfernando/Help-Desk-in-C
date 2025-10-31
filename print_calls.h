@@ -3,8 +3,6 @@
 
     #include <stdio.h>
     
-    // #include <time.h> 
-    
     #include "menu.h"
     #include "logs.h"
     #include "structs.h"

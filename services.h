@@ -22,7 +22,6 @@
     CallService* create_call_list_service(char **logs);
     
     int login(int logado);
-    // // void liberar_call_list(Call *call_list[], int call_list_control);
     void clean_buffer_stdin();
     int test_cancel(char* input);
     

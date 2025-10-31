@@ -7,13 +7,11 @@
         int call_id;
         int is_logged_in;
         int last_opened_call_id;
+        int returned_call_id_aux;
         int input_status;
-        int selected_call_id;
         int returned_call_id;
         int priority_filter;
         int status_filter;
-        int call_list_size;
-        int call_list_index;
         int request_log;
     
         char log_message[128];

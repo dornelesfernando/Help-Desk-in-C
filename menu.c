@@ -55,12 +55,12 @@ void menu_inicial() {
     printf(GREEN  " [3] " RESET "Ver todos os chamados\n");
     printf(GREEN  " [4] " RESET "Ver lista de baixa prioridade (normal)\n");
     printf(GREEN  " [5] " RESET "Ver lista por prioridade e status\n");
-    printf(GREEN  " [6] " RESET "Ver ultimo chamado aberto\n");
+    printf(GREEN  " [6] " RESET "Ver ultimo chamado aberto/atualizado\n");
     printf(YELLOW " [7] " RESET "Visualizar log's\n");
     printf(CYAN   " [8] " RESET "Acessar menu do administrador\n");
     printf(RED    " [9] " RESET "Sair do sistema\n");
     printf(BLUE "-------------------------------------------------------------\n" RESET);
-    printf(YELLOW "Selecione uma opção: " RESET);
+    printf(YELLOW " Selecione uma opção: " RESET);
 }
 
 void menu_administrador() {
@@ -74,7 +74,7 @@ void menu_administrador() {
     printf(CYAN   " [8] " RESET "Voltar ao menu principal\n");
     printf(RED    " [9] " RESET "Sair do sistema\n");
     printf(BLUE "-------------------------------------------------------------\n" RESET);
-    printf(YELLOW "Selecione uma opção: " RESET);
+    printf(YELLOW " Selecione uma opção: " RESET);
 }
 
 void pre_log() {

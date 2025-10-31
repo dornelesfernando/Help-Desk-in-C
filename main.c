@@ -47,86 +47,84 @@ int main() {
             params.input_status = scanf("%d", &opcao);
             clean_buffer_stdin();
             
-            if(!params.input_status) printf(RED "Digite apenas números.\n" YELLOW "Selecione uma opção: " RESET);
+            if(!params.input_status) printf(RED "Digite apenas números.\n" YELLOW " Selecione uma opção: " RESET);
             
         } while (!params.input_status);
-        
+
         // Menus
         clear();
         pre_log();
         if (params.is_logged_in) {
             switch (opcao) {
                 case 1: 
-//                     // call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
+                    // call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
 
-//                     // if(call_service == NULL && call_service->size == 0) {
-//                     //     printf(RED "Não há chamados cadastrados no sistema\n" RESET);
-//                     //     adicionar_log_dinamico(&logs, "Não há chamados cadastrados no sistema");   
-//                     // } else {
-//                     //     printf(GREEN "Atendendo chamado...\n" RESET);
-//                     //     adicionar_log_dinamico(&logs, "Atendendo chamado.");
+                    // if(call_service == NULL && call_service->size == 0) {
+                    //     printf(RED "Não há chamados cadastrados no sistema\n" RESET);
+                    //     adicionar_log_dinamico(&logs, "Não há chamados cadastrados no sistema");   
+                    // } else {
+                    //     printf(GREEN "Atendendo chamado...\n" RESET);
+                    //     adicionar_log_dinamico(&logs, "Atendendo chamado.");
                         
-//                     //     answer_call(call_service, call_list_heap, call_list_fifo, &logs);
-//                     // }
+                    //     answer_call(call_service, call_list_heap, call_list_fifo, &logs);
+                    // }
                     
-//                     // free_list_service(call_service);
+                    // free_list_service(call_service, &logs);
+                    // enter();
                     break;
                 case 2: 
-//                     // call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
-//                     // params.selected_call_id = list_calls_service(call_service, 9, 9, 1, &logs);
+                    printf(GREEN "Mostrando todos os chamados...\n" RESET); 
+                    adicionar_log_dinamico(&logs, "Mostrando todos os chamados.");
+                    call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
+                    params.returned_call_id_aux = list_calls_service(call_service, 9, 9, 1, &logs);
                     
-//                     // if (params.selected_call_id == 9999) {
-//                     //     printf(RED "Não há chamados cadastrados no sistema\n" RESET);
-//                     //     adicionar_log_dinamico(&logs, "Não há chamados cadastrados no sistema");
-//                     // } else {
-//                     //     printf(GREEN "Cancelando chamado...\n" RESET); 
-//                     //     adicionar_log_dinamico(&logs, "Cancelando chamado.");
+                    if (params.returned_call_id_aux != 9999) params.returned_call_id = params.returned_call_id_aux;
+
+                    if (params.returned_call_id_aux != 9999) {
+                        adicionar_log_dinamico(&logs, "Cancelando chamado.");
                         
-//                     //     update_call(call_service, call_list_heap, call_list_fifo, params.selected_call_id, 0, 1, &logs);
+                        params.returned_call_id_aux = update_call(call_service, call_list_heap, call_list_fifo, params.returned_call_id, 1, 1, &logs);
+                    }
                     
-//                     //     printf(GREEN "Chamado cancelado com sucesso!\n" RESET);
-//                     //     adicionar_log_dinamico(&logs, "Chamado cancelado com sucesso.");
-//                     // }
-                    
-//                     // free_list_service(call_service);
+                    free_list_service(call_service, &logs);
+                    enter();
+                    if (params.returned_call_id_aux == 9998) {
+                        pre_log();
+                        printf(GREEN "Chamado cancelado com sucesso!\n" RESET);
+                        adicionar_log_dinamico(&logs, "Chamado cancelado com sucesso.");
+                    }
                     break;
                 case 3: 
-//                     // printf(GREEN "Listando chamados para atualização chamado...\n" RESET);
-//                     // adicionar_log_dinamico(&logs, "Listando chamados para atualização chamado.");
+                    printf(GREEN "Mostrando todos os chamados...\n" RESET); 
+                    adicionar_log_dinamico(&logs, "Mostrando todos os chamados.");
+                    call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
+                    params.returned_call_id_aux = list_calls_service(call_service, 9, 9, 1, &logs);
                     
-//                     // call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
-//                     // params.selected_call_id = list_calls_service(call_service, 9, 9, 1, &logs);
-//                     // clear();
+                    if (params.returned_call_id_aux != 9999) params.returned_call_id = params.returned_call_id_aux;
+
+                    if (params.returned_call_id_aux != 9999) {
+                        clear();
+                        pre_log();
+                        printf(GREEN "Atualizando chamado...\n" RESET); 
+                        adicionar_log_dinamico(&logs, "Atualizando chamado.");
+                        
+                        params.last_opened_call_id = update_call(call_service, call_list_heap, call_list_fifo, params.returned_call_id, 1, 0, &logs);
+                    }
                     
-//                     // if (params.selected_call_id == 9999) {
-//                     //     printf(RED "Não há chamados cadastrados no sistema\n" RESET);
-//                     //     adicionar_log_dinamico(&logs, "Não há chamados cadastrados no sistema");
-                        
-//                     //     printf("\n\nPressione ENTER para voltar ao menu...");
-//                     //     getchar();
-//                     // } else {
-//                     //     printf(GREEN "Atualizando chamado...\n" RESET); 
-//                     //     adicionar_log_dinamico(&logs, "Atualizando chamado.");
-                        
-//                     //     update_call(call_service, call_list_heap, call_list_fifo, params.selected_call_id, 1, 0, &logs);
-                        
-//                     //     printf(GREEN "Chamado atualizado com sucesso!\n" RESET);
-//                     //     adicionar_log_dinamico(&logs, "Chamado atualizado com sucesso.");
-//                     // }
-                    
-//                     // free_list_service(call_service);
+                    free_list_service(call_service, &logs);
+                    enter();
+                    if (params.returned_call_id_aux != 9999) {
+                        pre_log();
+                        printf(GREEN "Chamado atualizado com sucesso!\n" RESET);
+                        adicionar_log_dinamico(&logs, "Chamado atualizado com sucesso.");
+                    }
                     break;
                 case 4:
                     printf(GREEN "Mostrando todos os chamados...\n" RESET); 
                     adicionar_log_dinamico(&logs, "Mostrando todos os chamados.");
                     
                     call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
-                    params.selected_call_id = list_calls_service(call_service, 9, 9, 0, &logs);
-                    
-                    if (params.returned_call_id == 9999) {
-                        printf(RED "Não há chamados cadastrados no sistema\n" RESET);
-                        adicionar_log_dinamico(&logs, "Não há chamados cadastrados no sistema.");
-                    }
+                    list_calls_service(call_service, 9, 9, 0, &logs);
                      
                     free_list_service(call_service, &logs);  
                     enter();
@@ -189,88 +187,75 @@ int main() {
                     free(call_list_pointer);
                     break;
                 case 2: 
-//                     // call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
-//                     // params.selected_call_id = list_calls_service(call_service, 9, 9, 1, &logs);
-//                     // clear();
+                    printf(GREEN "Mostrando todos os chamados...\n" RESET); 
+                    adicionar_log_dinamico(&logs, "Mostrando todos os chamados.");
+                    call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
+                    params.returned_call_id_aux = list_calls_service(call_service, 9, 9, 1, &logs);
                     
-//                     // if (params.selected_call_id == 9999) {
-//                     //     printf(RED "Não há chamados cadastrados no sistema\n" RESET);
-//                     //     adicionar_log_dinamico(&logs, "Não há chamados cadastrados no sistema");
+                    if (params.returned_call_id_aux != 9999) params.returned_call_id = params.returned_call_id_aux;
+
+                    if (params.returned_call_id_aux != 9999) {
+                        clear();
+                        pre_log();
+                        printf(GREEN "Atualizando chamado...\n" RESET); 
+                        adicionar_log_dinamico(&logs, "Atualizando chamado.");
                         
-//                     //     printf("\n\nPressione ENTER para voltar ao menu...");
-//                     //     getchar();
-//                     // } else {
-//                     //     printf(GREEN "Atualizando chamado...\n" RESET); 
-//                     //     adicionar_log_dinamico(&logs, "Atualizando chamado.");
-                        
-//                     //     update_call(call_service, call_list_heap, call_list_fifo, params.selected_call_id, 0, 0, &logs);
-//                     // }
+                        params.last_opened_call_id = update_call(call_service, call_list_heap, call_list_fifo, params.returned_call_id, 0, 0, &logs);
+                    }
                     
-//                     // free_list_service(call_service);
-//                     // clear();
-//                     // printf(GREEN "Chamado atualizado com sucesso!\n" RESET);
-//                     // adicionar_log_dinamico(&logs, "Chamado atualizado com sucesso.");
+                    free_list_service(call_service, &logs);
+                    enter();
+                    pre_log();
+                    printf(GREEN "Chamado atualizado com sucesso!\n" RESET);
+                    adicionar_log_dinamico(&logs, "Chamado atualizado com sucesso.");
                     break;
                 case 3:
                     printf(GREEN "Mostrando todos os chamados...\n" RESET); 
                     adicionar_log_dinamico(&logs, "Mostrando todos os chamados.");
                     
                     call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
-                    params.selected_call_id = list_calls_service(call_service, 9, 9, 0, &logs);
-                    
-                    if (params.returned_call_id == 9999) {
-                        printf(RED "Não há chamados cadastrados no sistema\n" RESET);
-                        adicionar_log_dinamico(&logs, "Não há chamados cadastrados no sistema.");
-                    }
+                    list_calls_service(call_service, 9, 9, 0, &logs);
                         
                     free_list_service(call_service, &logs);
                     enter();
                     break;
                 case 4: 
-//                     // printf(GREEN "Mostrando lista de baixa prioridade (normal)...\n" RESET); 
-//                     // adicionar_log_dinamico(&logs, "Mostrando lista de baixa prioridade (normal).");
+                    printf(GREEN "Mostrando lista de baixa prioridade (normal)...\n" RESET); 
+                    adicionar_log_dinamico(&logs, "Mostrando lista de baixa prioridade (normal).");
                     
-//                     // call_service = concat_call_list(NULL, call_list_fifo, &logs);
-//                     // params.selected_call_id = list_calls_service(call_service, 9, 9, 0, &logs);
+                    call_service = concat_call_list(NULL, call_list_fifo, &logs);
+                    list_calls_service(call_service, 9, 9, 0, &logs);
                     
-//                     // if (params.returned_call_id == 9999) {
-//                     //     clear();
-//                     //     pre_log();
-//                     //     printf(RED "Não há chamados cadastrados no sistema\n" RESET);
-//                     //     adicionar_log_dinamico(&logs, "Não há chamados cadastrados no sistema.");
-//                     // }
-                    
-//                     // enter();
+                    free_list_service(call_service, &logs);
+                    enter();
                     break;
                 case 5:
-//                     // select_parameter(&params.priority_filter, &params.status_filter);
-//                     // clear();
+                    printf(GREEN "Mostrando prioridades e status para seleção.\n" RESET); 
+                    adicionar_log_dinamico(&logs, "Mostrando prioridades e status para seleção.");
+                    select_parameter(&params.priority_filter, &params.status_filter, &logs);
+                    clear();
                     
-//                     // printf(GREEN "Mostrando lista por prioridades e status selecionado...\n" RESET); 
+                    pre_log();
+                    printf(GREEN "Mostrando lista por prioridades e status selecionado...\n" RESET); 
+                    adicionar_log_dinamico(&logs, "Mostrando lista por prioridades e status selecionado.");
                     
-//                     // call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
-//                     // params.returned_call_id = list_calls_service(call_service, params.priority_filter, params.status_filter, 0, &logs);
+                    call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
+                    list_calls_service(call_service, params.priority_filter, params.status_filter, 0, &logs);
                     
-//                     // if (params.returned_call_id == 9999) {
-//                     //     clear();
-//                     //     pre_log();
-//                     //     printf(RED "Não há chamados cadastrados no sistema\n" RESET);
-//                     //     adicionar_log_dinamico(&logs, "Não há chamados cadastrados no sistema.");
-//                     // }
-                    
-//                     // free_list_service(call_service);
-//                     // enter();
+                    free_list_service(call_service, &logs);
+                    enter();
                     break;
                 case 6:
                     if (params.last_opened_call_id) {
-                        printf(GREEN "Mostrando último chamado aberto...\n" RESET);
-                        adicionar_log_dinamico(&logs, "Mostrando último chamado aberto.");
+                        printf(GREEN "Mostrando último chamado aberto/atualizado...\n" RESET);
+                        adicionar_log_dinamico(&logs, "Mostrando último chamado aberto/atualizado.");
                         
+                        call_service = concat_call_list(call_list_heap, call_list_fifo, &logs);
                         print_calls(call_service, params.last_opened_call_id, &logs);
                         enter();
                     } else {
-                        printf(RED "Não há último chamado aberto.\n" RESET);
-                        adicionar_log_dinamico(&logs, "Não há último chamado aberto.");
+                        printf(RED "Não há último chamado aberto/atualizado.\n" RESET);
+                        adicionar_log_dinamico(&logs, "Não há último chamado aberto/atualizado.");
                     }
                     
                     break;
