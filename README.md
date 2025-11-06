@@ -4,7 +4,7 @@
 
 <div align="center">
     
-  ![https://img.shields.io/badge/status-finalizado-blueviolet?style=for-the-badge](https://img.shields.io/badge/status-finalizado-blueviolet?style=for-the-badge)
+  ![https://img.shields.io/badge/status-em--desenvolvimento-blueviolet?style=for-the-badge](https://img.shields.io/badge/status-em--desenvolvimento-blueviolet?style=for-the-badge)
   [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge)](https://opensource.org/licenses/Apache-2.0)
     
   ![https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
@@ -20,14 +20,14 @@
 <p align="center">
   Um sistema de Help Desk baseado em terminal, implementado em C puro para a disciplina de Estrutura de Dados e Programação.
   <br />
-  <a href="https://github.com/dornelesfernando/HelpDesk_C_EstruturaDeDados"><strong>Explore os Arquivos »</strong></a>
+  <a href="https://github.com/dornelesfernando/Help-Desk-in-C"><strong>Explore os Arquivos »</strong></a>
   <br />
   <br />
   <a href="#começando-ambiente-e-instalacao">Baixe, Configure e Execute</a>
   ·
-  <a href="https://github.com/dornelesfernando/HelpDesk_C_EstruturaDeDados/issues/new?template=bug-report-%F0%9F%90%9B.md">Reportar Bug</a>
+  <a href="https://github.com/dornelesfernando/Help-Desk-in-C/issues/new?template=bug-report-%F0%9F%90%9B.md">Reportar Bug</a>
   ·
-  <a href="https://github.com/dornelesfernando/HelpDesk_C_EstruturaDeDados/issues/new?template=feature-request-%E2%9C%A8.md">Sugerir Melhoria</a>
+  <a href="https://github.com/dornelesfernando/Help-Desk-in-C/issues/new?template=feature-request-%E2%9C%A8.md">Sugerir Melhoria</a>
 </p>
 
 <a id="visao-geral-do-projeto"></a>
