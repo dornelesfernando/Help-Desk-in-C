@@ -14,5 +14,9 @@
     #include "list_calls.h"
     #include "update_call.h"
     #include "answer_call.h"
+    #include "func.h"
+    #include "items.h"
+    #include "list_func.h"
+#include "list_items.h"
 
 #endif // MAIN_H

@@ -6,6 +6,7 @@
     #include "menu.h"
     #include "logs.h"
     #include "structs.h"
+    #include "services.h"
     
     void print_calls(CallService *call_data, int selected_id, char **logs);
 

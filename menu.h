@@ -14,6 +14,7 @@
     void footer();
     void menu_inicial();
     void menu_administrador();
+    void menu_tecnico();
     void menu(int perm);
     void pre_log();     
     const char* get_status_styled(StatusEnum s);

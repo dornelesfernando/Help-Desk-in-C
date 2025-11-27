@@ -2,12 +2,13 @@
 #define UPDATE_CALL_H
 
     #include <stdio.h>
+    #include <ctype.h>
     
     #include "menu.h"
     #include "logs.h"
     #include "services.h"
     #include "structs.h"
     
-    int update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call_list_fifo, int selected_id, int login_control, int cancel_control, char **logs);
+    int update_call(CallService *call_list, CallHeap *call_list_heap, CallFIFO *call_list_fifo, CallService *call_history, CallService *call_suspend, Arv *arv_tec, int selected_id, int login_control, int cancel_control, char **logs);
 
 #endif // UPDATE_CALL_H
