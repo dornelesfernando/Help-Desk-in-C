@@ -51,6 +51,12 @@ void print_calls(CallService *call_list, int selected_id, char **logs) {
     printf(CYAN " Nome:       " RESET "%s\n", call_data->name);
     printf(CYAN " Email:      " RESET "%s\n", call_data->email);
     
+    if (call_data->item != NONE) {
+        printf(MAGENTA "\n--- Itens " "-------------------------------------------\n" RESET);
+        printf(CYAN " Item:       " RESET "%s\n", get_item_char(call_data->item));
+        printf(CYAN " Quantidade  " RESET "%d\n", call_data->qtd_item);
+    }
+    
     printf(MAGENTA "\n--- Histórico ---------------------------------------------\n" RESET);
     
     tm_info = localtime(&call_data->created_at);

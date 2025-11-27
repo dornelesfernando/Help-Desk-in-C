@@ -35,6 +35,7 @@ int list_calls_service(CallService *call_list, int priority, int status, int sel
         case 2:  strcpy(priority_name, "Média"); break;
         case 3:  strcpy(priority_name, "Alta"); break;
         case 4:  strcpy(priority_name, "Urgente"); break;
+        case 5:  strcpy(priority_name, "Retornado"); break;
         default: strcpy(priority_name, "Todos"); break;
     }
     
@@ -42,7 +43,8 @@ int list_calls_service(CallService *call_list, int priority, int status, int sel
         case 1:  strcpy(status_name, "Aberto"); break;
         case 2:  strcpy(status_name, "Em Andamento");break;
         case 3:  strcpy(status_name, "Resolvido"); break;
-        case 4:  strcpy(status_name, "Fechado"); break;
+        case 4:  strcpy(status_name, "Cancelado"); break;
+        case 5:  strcpy(status_name, "Suspenso"); break;
         default: strcpy(status_name, "Todos"); break;
     }
     
@@ -64,7 +66,9 @@ int list_calls_service(CallService *call_list, int priority, int status, int sel
             printf(CYAN " Nome do solicitante:  " RESET "%s\n", call_data->name);
             if (call_data->email && call_data->email[0] != '\0') printf(CYAN " Email do solicitante: " RESET "%s\n", call_data->email);
             if (call_data->name_func && call_data->name_func[0] != '\0') printf(CYAN " Nome do funcionário:  " RESET "%s\n", call_data->name_func);
-           
+            if (call_data->item != NONE) printf(CYAN " Item:                 " RESET "%s\n", get_item_char(call_data->item));
+            if (call_data->item != NONE) printf(CYAN " Quantidade            " RESET "%d\n", call_data->qtd_item);
+
             char data_str[100];
             struct tm *tm_info;
             
@@ -152,11 +156,12 @@ void select_parameter(int *priority, int *status, char **logs) {
     line();
     
     printf(GREEN "  Seleione a prioridade do chamado que deseja consultar\n");
-    printf(BLUE  "  [1] " GREEN    "Baixa\n"   RESET);
-    printf(BLUE  "  [2] " YELLOW   "Média\n"   RESET);
-    printf(BLUE  "  [3] " RED      "Alta\n"    RESET);
-    printf(BLUE  "  [4] " BOLD RED "Urgente\n" RESET);
-    printf(BLUE  "  [9] " MAGENTA  "Todos\n"   RESET);
+    printf(BLUE  "  [1] " GREEN         "Baixa\n"   RESET);
+    printf(BLUE  "  [2] " YELLOW        "Média\n"   RESET);
+    printf(BLUE  "  [3] " RED           "Alta\n"    RESET);
+    printf(BLUE  "  [4] " BOLD RED      "Urgente\n" RESET);
+    printf(BLUE  "  [5] " BOLD MAGENTA  "Retornado\n" RESET);
+    printf(BLUE  "  [9] " MAGENTA       "Todos\n"   RESET);
     
     do {
         printf(YELLOW "\n  --> Digite a prioridade desejada: " RESET);
@@ -181,7 +186,8 @@ void select_parameter(int *priority, int *status, char **logs) {
     printf(BLUE  "  [1] " YELLOW  "Aberto\n"       RESET);
     printf(BLUE  "  [2] " BLUE    "Em Andamento\n" RESET);
     printf(BLUE  "  [3] " GREEN   "Resolvido\n"    RESET);
-    printf(BLUE  "  [4] " BOLD    "Fechado\n"      RESET);
+    printf(BLUE  "  [4] " BOLD    "Cancelado\n"      RESET);
+    printf(BLUE  "  [5] " BOLD    "Suspenso\n"      RESET);
     printf(BLUE  "  [9] " MAGENTA "Todos\n"        RESET);
     
     do {
@@ -201,4 +207,153 @@ void select_parameter(int *priority, int *status, char **logs) {
     
     adicionar_log_dinamico(logs, "Parâmetros selecionados e validados.");
     line();
+}
+
+int list_calls_tecnic_service(CallService *lista_pessoal, int priority, int status, int select_control, char **logs) {
+    int scanf_control = 0;
+    int selected_id = 0;
+    int print_caunt = 0;
+    char priority_name[20];
+    char status_name[20];
+    char log_message[128];
+
+    if(lista_pessoal == NULL) {
+        printf(RED "Não há chamados atribuídos a este técnico para serem listados.\n" RESET);
+        adicionar_log_dinamico(logs, "Tentativa de listar chamados de tecnico, mas a lista está vazia.");
+        return 9999;
+    } else {
+        if(priority == 9 && status == 9) {
+            adicionar_log_dinamico(logs, "Listando todos os chamados pessoais");
+        } else if(priority == 9) {
+            snprintf(log_message, sizeof(log_message), "Listando chamados pessoais (todas as prioridades, status %s)", get_status_styled(status));
+            adicionar_log_dinamico(logs, log_message);
+        } else if(status == 9) {
+            snprintf(log_message, sizeof(log_message), "Listando chamados pessoais (prioridade %s, todos os status)", get_priority_styled(priority));
+            adicionar_log_dinamico(logs, log_message);
+        } else {
+            snprintf(log_message, sizeof(log_message), "Listando chamados pessoais (prioridade %s, status %s)", get_priority_styled(priority), get_status_styled(status));
+            adicionar_log_dinamico(logs, log_message);
+        }
+    }
+
+    header();
+    printf(BOLD CYAN "--- CHAMADOS ATRIBUÍDOS AO TÉCNICO ---\n" RESET);
+    line();
+    
+    switch(priority) {
+        case 1:  strcpy(priority_name, "Baixa"); break;
+        case 2:  strcpy(priority_name, "Média"); break;
+        case 3:  strcpy(priority_name, "Alta"); break;
+        case 4:  strcpy(priority_name, "Urgente"); break;
+        case 5:  strcpy(priority_name, "Retornado"); break;
+        default: strcpy(priority_name, "Todos"); break;
+    }
+    
+    switch(status) {
+        case 1:  strcpy(status_name, "Aberto"); break;
+        case 2:  strcpy(status_name, "Em Andamento");break;
+        case 3:  strcpy(status_name, "Resolvido"); break;
+        case 4:  strcpy(status_name, "Cancelado"); break;
+        case 5:  strcpy(status_name, "Suspenso"); break;
+        default: strcpy(status_name, "Todos"); break;
+    }
+    
+    CallNode *current_node = lista_pessoal->head;
+    
+    while (current_node != NULL) {
+        Call *call_data = current_node->data;
+        
+        if (((!strcmp(get_priority_char(call_data->priority), priority_name)) || priority == 9) && 
+            (!(strcmp(get_status_char(call_data->status), status_name)) || status == 9)) {
+            
+            printf(RED  " Id:                   " RESET BOLD "%d\n", call_data->id);
+            printf(CYAN " Título:               " RESET BOLD "%s\n", call_data->title);
+            
+            if (call_data->desc && call_data->desc[0] != '\0') printf(CYAN " Descrição:            " RESET BOLD "%s\n", call_data->desc);
+            
+            printf(CYAN " Status:               " RESET "%s\n", get_status_styled(call_data->status));
+            printf(CYAN " Prioridade:           " RESET "%s\n", get_priority_styled(call_data->priority));
+            printf(CYAN " Nome do solicitante:  " RESET "%s\n", call_data->name);
+            if (call_data->email && call_data->email[0] != '\0') printf(CYAN " Email do solicitante: " RESET "%s\n", call_data->email);
+            if (call_data->name_func && call_data->name_func[0] != '\0') printf(CYAN " Nome do funcionário:  " RESET "%s\n", call_data->name_func);
+            if (call_data->item != NONE) printf(CYAN " Item:                 " RESET "%s\n", get_item_char(call_data->item));
+            if (call_data->item != NONE) printf(CYAN " Quantidade            " RESET "%d\n", call_data->qtd_item);
+
+            char data_str[100];
+            struct tm *tm_info;
+            
+            tm_info = localtime(&call_data->created_at);
+            strftime(data_str, sizeof(data_str), "%d/%m/%Y às %H:%M:%S", tm_info);
+            printf(CYAN " Criado em:            " RESET "%s\n", data_str);
+        
+            if (call_data->updated_at > 0) {
+                tm_info = localtime(&call_data->updated_at);
+                strftime(data_str, sizeof(data_str), "%d/%m/%Y às %H:%M:%S", tm_info);
+                printf(CYAN " Atualizado:           " RESET "%s\n", data_str);
+            }
+            
+            if (call_data->data_fechamento > 0) {
+                tm_info = localtime(&call_data->data_fechamento);
+                strftime(data_str, sizeof(data_str), "%d/%m/%Y às %H:%M:%S", tm_info);
+                printf(CYAN " Fechado em:           " RESET BOLD "%s\n", data_str);
+            }
+            
+            if (call_data->solution && call_data->solution[0] != '\0') printf(CYAN " Solution:             " RESET "%s\n", call_data->solution);
+            
+            line();
+            
+            print_caunt++;
+        }
+        
+        current_node = current_node->next;
+    }
+    
+    if (print_caunt) {
+        if (print_caunt == 1) {
+            printf(GREEN "--> [%d]" YELLOW " chamado impresso.\n" RESET, print_caunt);
+            snprintf(log_message, sizeof(log_message), "%d chamado impresso.", print_caunt);
+            adicionar_log_dinamico(logs, log_message);
+        } else {
+            printf(GREEN "--> [%d]" YELLOW " chamados impressos.\n" RESET, print_caunt);
+            snprintf(log_message, sizeof(log_message), "%d chamados impressos.", print_caunt);
+            adicionar_log_dinamico(logs, log_message);
+        }
+    } else {
+        printf(RED " Não há chamados para serem listados com os filtros aplicados.\n" RESET);
+        adicionar_log_dinamico(logs, "Não há chamados para serem listados com os filtros aplicados.");
+        return 9999;
+    }
+
+    if (select_control && print_caunt > 0) {
+        adicionar_log_dinamico(logs, "Selecionando chamado.");
+        int id_is_valid = 0;
+        do {
+            printf(YELLOW "Digite o Id do chamado que deseja atualizar: " RESET);
+            scanf_control = scanf("%d", &selected_id);
+            
+            if(!scanf_control) {
+                printf(RED "\nDigite apenas números.\n" RESET);
+                id_is_valid = 0;
+            } else {
+                id_is_valid = 0;
+                CallNode *temp_node = lista_pessoal->head;
+                while (temp_node != NULL) {
+                    if (temp_node->data->id == selected_id) {
+                        id_is_valid = 1;
+                        break;
+                    }
+                    temp_node = temp_node->next;
+                }
+                
+                if (!id_is_valid) {
+                    printf(RED "\nO chamado com ID %d nao existe na sua lista.\n" RESET, selected_id);
+                }
+            }
+            
+            clean_buffer_stdin();
+        } while (!scanf_control || !id_is_valid);
+    }
+    
+    line();
+    return selected_id;
 }

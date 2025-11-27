@@ -10,5 +10,6 @@
     
     int list_calls_service(CallService *call_list, int priority, int status, int select_control, char **logs);
     void select_parameter(int *priority, int *status, char **logs);
+    int list_calls_tecnic_service(CallService *lista_pessoal, int priority, int status, int select_control, char **logs);
 
 #endif // LIST_CALLS_H

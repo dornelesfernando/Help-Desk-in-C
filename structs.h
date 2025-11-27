@@ -22,7 +22,8 @@
         ABERTO,
         EM_ANDAMENTO,
         RESOLVIDO,
-        FECHADO
+        CANCELADO,
+        SUSPENSO
     } StatusEnum;
     
     // Define the priority
@@ -30,8 +31,23 @@
         BAIXA,
         MEDIA,
         ALTA,
-        URGENTE
+        URGENTE,
+        RETORNADO
     } PriorityEnum;
+    
+    // Define items
+    typedef enum {
+        NONE,
+        MOUSE,
+        KEYBOARD,
+        CABO_HDMI,
+        MONITOR,
+        IMPRESSORA,
+        NOTEBOOK,
+        CABO_REDE,
+        WEBCAM,
+        HEADSET
+    } ItemsEnum;
     
     typedef struct {
         // --- Identificação ---
@@ -44,6 +60,8 @@
         // --- O Quê ---
         char title[150];
         char desc[1024];
+        ItemsEnum item;
+        int qtd_item;
     
         // --- Como ---
         StatusEnum status;
@@ -84,5 +102,17 @@
         CallNode *tail;
         int size;
     } CallService;
+    
+    typedef struct ArvNo {
+        char name[100];
+        int qtd;
+        CallService *datas;
+        struct ArvNo *right;
+        struct ArvNo *left;
+    } ArvNo;
+    
+    typedef struct Arv {
+        ArvNo *raiz; 
+    } Arv;
 
 #endif // STRUCTS_H
